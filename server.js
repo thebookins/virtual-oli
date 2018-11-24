@@ -2,7 +2,6 @@ var express = require("express");
 var bodyParser = require("body-parser");
 const socketIO = require('socket.io');
 
-
 var app = express();
 app.use(bodyParser.json());
 
@@ -11,9 +10,14 @@ var distDir = __dirname + "/dist/virtual-oli";
 app.use(express.static(distDir));
 
 // Initialize the app.
-var server = app.listen(process.env.PORT || 8080, function () {
-  var port = server.address().port;
-  console.log("App now running on port", port);
+// var server = app.listen(process.env.PORT || 8080, function () {
+//   var port = server.address().port;
+//   console.log("App now running on port", port);
+// });
+
+const PORT = process.env.PORT || 3000;
+var server = app.listen(PORT, () => {
+    console.log(`Our app is running on port ${ PORT }`);
 });
 
 const io = socketIO(server);
