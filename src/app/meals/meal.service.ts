@@ -15,7 +15,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class MealService {
-  private mealsUrl = 'http://localhost:3000/api/meals';  // URL to web api
+  private mealsUrl = '/api/meals';  // URL to web api
 
   constructor(private http: HttpClient) { }
 

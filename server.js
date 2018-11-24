@@ -8,11 +8,6 @@ app.use(bodyParser.json());
 // Create link to Angular build directory
 var distDir = __dirname + "/dist/virtual-oli/";
 app.use(express.static(distDir));
-// NOT SURE IF THE FOLLOWING IS REQUIRED
-app.get('*',(req, res) => {
-  res.sendFile(path.resolve(__dirname, 'dist', 'virtual-oli', 'index.html'));
-});
-// END NOT SURE IF THE FOLLOWING IS REQUIRED
 
 // Initialize the app.
 var server = app.listen(process.env.PORT || 8080, function () {
@@ -27,15 +22,15 @@ const MEALS = [
 ];
 
 // t1d
-const t1d = require('./t1d')();
+const t1d = require('./sim/t1d')();
 
 // cgm
-const cgm = require('./cgm')(t1d);
-require('./cgmIO')(io, cgm);
+const cgm = require('./sim/cgm')(t1d);
+require('./sim/cgmIO')(io, cgm);
 
 // pump
-const pump = require('./pump')(t1d);
-require('./pumpIO')(io, pump);
+const pump = require('./sim/pump')(t1d);
+require('./sim/pumpIO')(io, pump);
 
 io.on('connection', (socket) => {
   console.log('Client connected');
