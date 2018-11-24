@@ -3,11 +3,11 @@ import { GlucoseService } from '../glucose.service';
 import { Glucose } from '../glucose';
 
 @Component({
-  selector: 'app-glucose',
-  templateUrl: './glucose.component.html',
-  styleUrls: ['./glucose.component.css']
+  selector: 'app-glucose-details',
+  templateUrl: './glucose-details.component.html',
+  styleUrls: ['./glucose-details.component.css']
 })
-export class GlucoseComponent implements OnInit {
+export class GlucoseDetailsComponent implements OnInit {
 
   glucose: Glucose = null;
 

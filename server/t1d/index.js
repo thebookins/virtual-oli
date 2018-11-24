@@ -1,7 +1,7 @@
-//const Model = require('marjorie');
+const Model = require('marjorie');
 
 module.exports = () => {
-//  const model = Model(1);
+ const model = Model(1);
 
   // private data
   var bloodGlucose = 100;
@@ -10,19 +10,17 @@ module.exports = () => {
 
   setInterval(() => {
     console.log('stepping');
-//    model.step(0);
+    model.step(0);
   }, 1000);
 
   return {
     // API (public) functions
-    // eat: model.eat,
-    eat: () => {},
+    eat: model.eat,
 
     dose: (units) => {
       iob += units;
     },
 
-    // sense: () => model.glucose,
-    sense: () => 6,
+    sense: () => model.glucose,
   };
 }

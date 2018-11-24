@@ -3,11 +3,11 @@ import { Meal } from '../meal';
 import { MealService } from '../meal.service';
 
 @Component({
-  selector: 'app-meals',
-  templateUrl: './meals.component.html',
-  styleUrls: ['./meals.component.css']
+  selector: 'app-meal-list',
+  templateUrl: './meal-list.component.html',
+  styleUrls: ['./meal-list.component.css']
 })
-export class MealsComponent implements OnInit {
+export class MealListComponent implements OnInit {
 
   meals: Meal[];
 
