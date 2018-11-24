@@ -1,0 +1,15 @@
+<h2>Meals</h2>
+<div>
+  <label>eat:
+    <input #carbs />
+  </label>
+  <!-- (click) passes input value to add() and then clears the input -->
+  <button (click)="add(carbs.value); carbs.value=''">
+    add
+  </button>
+</div>
+<ul class="meals">
+  <li *ngFor="let meal of meals">
+    <span class="badge">{{meal.date}}</span> {{meal.carbs}} g
+  </li>
+</ul>
