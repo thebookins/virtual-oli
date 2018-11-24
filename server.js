@@ -7,12 +7,11 @@ var app = express();
 app.use(bodyParser.json());
 
 // Create link to Angular build directory
-// TODO: not sure why we are building in /dist/virtual-oli; expected just /dist
 var distDir = __dirname + "/dist/virtual-oli";
 app.use(express.static(distDir));
 
 // Initialize the app.
-var server = app.listen(process.env.PORT || 3000, function () {
+var server = app.listen(process.env.PORT || 8080, function () {
   var port = server.address().port;
   console.log("App now running on port", port);
 });
