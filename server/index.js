@@ -8,6 +8,11 @@ app.use(bodyParser.json());
 // Create link to Angular build directory
 var distDir = __dirname + "/dist/virtual-oli/";
 app.use(express.static(distDir));
+// NOT SURE IF THE FOLLOWING IS REQUIRED
+app.get('*',(req, res) => {
+  res.sendFile(path.resolve(__dirname, 'dist', 'virtual-oli', 'index.html'));
+});
+// END NOT SURE IF THE FOLLOWING IS REQUIRED
 
 // Initialize the app.
 var server = app.listen(process.env.PORT || 8080, function () {
