@@ -5,6 +5,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { Meal } from './meal';
+import { MessageService } from '../message.service';
 // TODO: import MessageService
 
 const httpOptions = {
@@ -17,7 +18,9 @@ const httpOptions = {
 export class MealService {
   private mealsUrl = '/api/meals';  // URL to web api
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private messageService: MessageService) { }
 
   getMeals(): Observable<Meal[]> {
     return this.http.get<Meal[]>(this.mealsUrl)
@@ -53,7 +56,6 @@ export class MealService {
 
   /** Log a MealService message with the MessageService */
   private log(message: string) {
-    // TODO: implement
-    //this.messageService.add(`HeroService: ${message}`);
+    this.messageService.add(`MealService: ${message}`);
   }
 }
