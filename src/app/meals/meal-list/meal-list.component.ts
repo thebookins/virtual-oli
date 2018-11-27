@@ -15,7 +15,7 @@ export class MealListComponent implements OnInit {
 
   add(carbs: number): void {
     if (!carbs) { return; }
-    this.mealService.addMeal({ carbs } as Meal)
+    this.mealService.addMeal({ date: new Date(), carbs } as Meal)
       .subscribe(meal => {
         this.meals.push(meal);
       });
