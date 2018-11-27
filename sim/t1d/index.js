@@ -9,7 +9,6 @@ module.exports = () => {
   var iob = 0;
 
   setInterval(() => {
-    console.log(`stepping - glucose = ${model.glucose}`)
     model.step(0);
   }, 1000);
 
