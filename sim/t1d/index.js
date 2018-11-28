@@ -10,7 +10,7 @@ module.exports = () => {
 
   setInterval(() => {
     model.step(0);
-  }, 1000);
+  }, 60 * 1000); // every minute
 
   return {
     // API (public) functions

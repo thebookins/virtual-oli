@@ -15,6 +15,8 @@ export class GlucoseChartComponent implements OnInit {
 
   public datasets:Array<any>;
 
+  private sub: any;
+
 
   public options:any = {
     animation: {
@@ -74,7 +76,6 @@ export class GlucoseChartComponent implements OnInit {
           showLine: false
         }
       ];
-      console.log(this.datasets);
       this.glucoseBaseTime = now;
 
       setInterval(() => {
@@ -97,6 +98,16 @@ export class GlucoseChartComponent implements OnInit {
   constructor(private glucoseService: GlucoseService) { }
 
   ngOnInit() {
-    this.getGlucose();
+    this.getGlucose()
+    this.sub = this.glucoseService.glucose.subscribe(data => {
+      this.datasets[0].data.push({x: 0, y: data.glucose})
+      if (this.datasets[0].data.length > 36) {
+        this.datasets[0].data.shift()
+      }
+    })
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 }

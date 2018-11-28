@@ -76,5 +76,6 @@ app.post("/api/meals", function(req, res) {
  */
 
 app.get("/api/glucose", function(req, res) {
-  res.status(200).json(GLUCOSE);
+  // res.status(200).json(GLUCOSE);
+  res.status(200).json(cgm.history);
 });
