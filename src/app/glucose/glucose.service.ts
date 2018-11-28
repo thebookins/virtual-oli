@@ -1,9 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Glucose } from './glucose';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { Observable } from 'rxjs/Observable';
 
+import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
+
+import { Glucose } from './glucose';
+import { MessageService } from '../message.service';
+
 
 import * as io from 'socket.io-client';
 
@@ -12,9 +16,25 @@ import * as io from 'socket.io-client';
   providedIn: 'root'
 })
 export class GlucoseService {
+  private glucoseUrl = '/api/glucose';
   private socket;
 
-  constructor() { }
+  constructor(
+    private http: HttpClient,
+    private messageService: MessageService) { }
+
+  // this will eventually use a HTTP request to get an array of glucose
+  // values for the last 3 hours
+  // perhaps change name to getGlucoseHistory or something?
+  getGlucose(): Observable<Glucose[]> {
+    // TODO: this is a workaround for https://stackoverflow.com/q/46559268
+    return this.http.get<any>(this.glucoseUrl).pipe(
+      // TODO: this is a workaround for https://stackoverflow.com/q/46559268
+      map(response => JSON.parse(JSON.stringify(response), this.reviver) as Glucose[]),
+      tap(glucose => this.log(`fetched glucose: ${glucose.length} values`)),
+      catchError(this.handleError('getGlucose', []))
+    );
+  }
 
   get glucose(): Observable<Glucose> {
     let observable = new Observable<Glucose>(observer => {
@@ -33,10 +53,36 @@ export class GlucoseService {
     );
   }
 
+  private reviver (key, value): any {
+    if (value !== null && (key === 'readDate'))
+      return new Date(value);
+    return value;
+  }
+
+  /**
+    * Handle Http operation that failed.
+    * Let the app continue.
+    * @param operation - name of the operation that failed
+    * @param result - optional value to return as the observable result
+    */
+   private handleError<T> (operation = 'operation', result?: T) {
+     return (error: any): Observable<T> => {
+
+       // TODO: send the error to remote logging infrastructure
+       console.error(error); // log to console instead
+
+       // TODO: better job of transforming error for user consumption
+       this.log(`${operation} failed: ${error.message}`);
+
+       // Let the app keep running by returning an empty result.
+       return of(result as T);
+     };
+   }
+
+
     /** Log a GlucoseService message with the MessageService */
   private log(message: string) {
-    // this.messageService.add('GlucoseService: ' + message);
-    console.log(message);
+    this.messageService.add('GlucoseService: ' + message);
   }
 }
 
@@ -111,11 +157,6 @@ export class GlucoseService {
 //     };
 //   }
 //
-//   private reviver (key, value): any {
-//     if (value !== null && (key === 'readDate'))
-//       return new Date(value);
-//     return value;
-//   }
 //
 //   /** Log a GlucoseService message with the MessageService */
 //   private log(message: string) {

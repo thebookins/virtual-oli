@@ -17,9 +17,18 @@ var server = app.listen(process.env.PORT || 8080, function () {
 
 const io = socketIO(server);
 const MEALS = [
-  { date: new Date(), carbs: 100 },
-  { date: new Date(), carbs: 50 }
+  { date: new Date(), value: 6 },
+  { date: new Date(), carbs: 5 }
 ];
+
+const GLUCOSE = [];
+const now = new Date().getTime();
+for (let minsAgo = 0; minsAgo < 180; minsAgo += 5) {
+  GLUCOSE.push({
+    readDate: new Date(now - minsAgo * 60 * 1000),
+    glucose: 6
+  });
+}
 
 // t1d
 const t1d = require('./sim/t1d')();
@@ -59,4 +68,13 @@ app.post("/api/meals", function(req, res) {
 
   t1d.eat(newMeal.carbs);
   res.status(201).json(newMeal);
+});
+
+
+/*  "/api/glucose"
+ *    GET: returns the last three hours of glucose
+ */
+
+app.get("/api/glucose", function(req, res) {
+  res.status(200).json(GLUCOSE);
 });

@@ -1,22 +1,26 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { ChartsModule } from 'ng2-charts';
 
 import { AppComponent } from './app.component';
 import { GlucoseDetailsComponent } from './glucose/glucose-details/glucose-details.component';
 import { MealListComponent } from './meals/meal-list/meal-list.component';
 import { MessagesComponent } from './messages/messages.component';
+import { GlucoseChartComponent } from './glucose/glucose-chart/glucose-chart.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     GlucoseDetailsComponent,
     MealListComponent,
-    MessagesComponent
+    MessagesComponent,
+    GlucoseChartComponent
   ],
   imports: [
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
+    ChartsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
