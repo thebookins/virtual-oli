@@ -21,15 +21,6 @@ const MEALS = [
   { date: new Date(), carbs: 5 }
 ];
 
-const GLUCOSE = [];
-const now = new Date().getTime();
-for (let minsAgo = 0; minsAgo < 180; minsAgo += 5) {
-  GLUCOSE.push({
-    readDate: new Date(now - minsAgo * 60 * 1000),
-    glucose: 6
-  });
-}
-
 // t1d
 const t1d = require('./sim/t1d')();
 
