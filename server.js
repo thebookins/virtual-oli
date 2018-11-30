@@ -22,15 +22,16 @@ const MEALS = [
 ];
 
 // t1d
-const t1d = require('./sim/t1d')();
+// const t1d = require('./sim/t1d')();
 
 // cgm
-const cgm = require('./sim/cgm')(t1d);
+const cgm = require('./sim/cgm')();
+cgm.interstitialGlucose = 6;
 require('./sim/cgmIO')(io, cgm);
 
-// pump
-const pump = require('./sim/pump')(t1d);
-require('./sim/pumpIO')(io, pump);
+// // pump
+// const pump = require('./sim/pump')(t1d);
+// require('./sim/pumpIO')(io, pump);
 
 io.on('connection', (socket) => {
   console.log('Client connected');
@@ -39,6 +40,7 @@ io.on('connection', (socket) => {
 
 setInterval(() => io.emit('time', new Date().toTimeString()), 1000);
 
+//setTimeout(() => t1d.addPump(pump), 6000);
 
 
 /*  "/api/meals"
