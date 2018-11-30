@@ -4,16 +4,17 @@ module.exports = () => {
   const eventEmitter = new events.EventEmitter();
   const everyFiveMinutes = 5 * 60 * 1000;
 
-  let interstitialGlucose = 0;
+  let read = () => 0;
 
   setInterval(() => {
-    eventEmitter.emit('glucose', glucose);
-  }, everyFiveMinutes);
+    console.log(`emitting glucose of ${read()}`)
+    eventEmitter.emit('glucose', read());
+  }, 1000);
 
   const api = {
-    on: eventEmitter.on,
-    set interstitialGlucose(val) {
-      interstitialGlucose = val;
+    on: (message, callback) => eventEmitter.on(message, callback),
+    set read(fn) {
+      read = fn;
     }
   };
 

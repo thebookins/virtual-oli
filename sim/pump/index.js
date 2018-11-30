@@ -10,6 +10,9 @@ module.exports = () => {
   }, 1000);
 
   const api = {
+    bolus: (insulin) => {
+      deliver(insulin);
+    },
     set deliver(fn) {
       deliver = fn;
     }

@@ -6,7 +6,7 @@ module.exports = (io, pump) => {
   nsp.on('connection', (socket) => {
     socket.on('bolus', (units) => {
       units = units || 0;
-      pump.bolus(units);
+      pump.bolus(units * 1000); // change units to mU
     });
   });
 }

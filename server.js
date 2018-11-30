@@ -22,16 +22,19 @@ const MEALS = [
 ];
 
 // t1d
-// const t1d = require('./sim/t1d')();
+const t1d = require('./sim/t1d')();
 
 // cgm
 const cgm = require('./sim/cgm')();
-cgm.interstitialGlucose = 6;
-require('./sim/cgmIO')(io, cgm);
+require('./sim/cgm/io')(io, cgm);
 
-// // pump
-// const pump = require('./sim/pump')(t1d);
-// require('./sim/pumpIO')(io, pump);
+// pump
+const pump = require('./sim/pump')();
+require('./sim/pump/io')(io, pump);
+
+// hook up t1d, pump and cgm
+t1d.attachPump(pump);
+t1d.attachCGM(cgm);
 
 io.on('connection', (socket) => {
   console.log('Client connected');
