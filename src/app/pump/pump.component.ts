@@ -11,7 +11,7 @@ export class PumpComponent implements OnInit {
 
   private sub: any;
 
-  constructor(private pumpService: PumpService) { }
+  constructor(public pumpService: PumpService) { }
 
   ngOnInit() {
     this.sub = this.pumpService.date.subscribe(date => this.date = date);
