@@ -8,6 +8,7 @@ import { GlucoseDetailsComponent } from './glucose/glucose-details/glucose-detai
 import { MealListComponent } from './meals/meal-list/meal-list.component';
 import { MessagesComponent } from './messages/messages.component';
 import { GlucoseChartComponent } from './glucose/glucose-chart/glucose-chart.component';
+import { PumpComponent } from './pump/pump.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { GlucoseChartComponent } from './glucose/glucose-chart/glucose-chart.com
     GlucoseDetailsComponent,
     MealListComponent,
     MessagesComponent,
-    GlucoseChartComponent
+    GlucoseChartComponent,
+    PumpComponent
   ],
   imports: [
     BrowserModule,

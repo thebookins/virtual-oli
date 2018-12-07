@@ -7,9 +7,8 @@ module.exports = () => {
   let read = () => 0;
 
   setInterval(() => {
-    console.log(`emitting glucose of ${read()}`)
     eventEmitter.emit('glucose', read());
-  }, 1000);
+  }, everyFiveMinutes);
 
   const api = {
     on: (message, callback) => eventEmitter.on(message, callback),

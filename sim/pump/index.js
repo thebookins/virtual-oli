@@ -6,11 +6,12 @@ module.exports = () => {
   };
 
   setInterval(() => {
-    deliver(basal_rate_U_per_hour / 3600)
+    deliver(basal_rate_U_per_hour / 3600);
   }, 1000);
 
   const api = {
     bolus: (insulin) => {
+      console.log(`bolusing ${insulin} units`);
       deliver(insulin);
     },
     set deliver(fn) {
