@@ -32,8 +32,7 @@ module.exports = () => {
     note.contentAvailable = 1;
 
     apnProvider.send(note, deviceToken).then( (result) => {
-      console.log(`sent apn successfully to ${result.sent}`);
-      console.log(`failed to send to ${result.failed}`);
+      console.log(JSON.stringify(result));
       // see documentation for an explanation of result
     });
 
