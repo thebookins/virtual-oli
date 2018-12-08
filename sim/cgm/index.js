@@ -7,7 +7,7 @@ module.exports = () => {
 
   const options = {
     token: {
-      key: "./AuthKey_23NRN4PHVP.p8",
+      key: __dirname + "/AuthKey_23NRN4PHVP.p8",
       keyId: "23NRN4PHVP",
       teamId: "8ZWMLSD6JG"
     },
