@@ -22,7 +22,7 @@ module.exports = () => {
       read = fn;
     },
     get glucose() {
-      return glucose;
+      return latestGlucose;
     }
   };
 
