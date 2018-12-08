@@ -30,6 +30,7 @@ module.exports = () => {
 
     var note = new apn.Notification();
     note.contentAvailable = 1;
+    note.topic = "com.8ZWMLSD6JG.loopkit.Loop"
 
     apnProvider.send(note, deviceToken).then( (result) => {
       console.log(JSON.stringify(result));
