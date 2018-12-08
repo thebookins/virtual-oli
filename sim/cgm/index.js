@@ -3,7 +3,7 @@ var apn = require('apn');
 
 module.exports = () => {
   const eventEmitter = new events.EventEmitter();
-  const everyFiveMinutes = 1 * 60 * 1000;
+  const everyFiveMinutes = 5 * 60 * 1000;
 
   const options = {
     token: {
