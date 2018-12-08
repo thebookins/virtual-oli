@@ -3,17 +3,26 @@ const events = require('events');
 module.exports = () => {
   const eventEmitter = new events.EventEmitter();
   const everyFiveMinutes = 5 * 60 * 1000;
+  const latestGlucose = {
+    readDate: new Date(0),
+    glucose: null
+  };
 
   let read = () => 0;
 
   setInterval(() => {
-    eventEmitter.emit('glucose', read());
+    latestGlucose.readDate = new Date(),
+    latestGlucose.glucose = read();
+//    eventEmitter.emit('glucose', read());
   }, everyFiveMinutes);
 
   const api = {
     on: (message, callback) => eventEmitter.on(message, callback),
     set read(fn) {
       read = fn;
+    },
+    get glucose() {
+      return glucose;
     }
   };
 
