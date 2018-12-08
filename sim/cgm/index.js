@@ -3,7 +3,7 @@ var apn = require('apn');
 
 module.exports = () => {
   const eventEmitter = new events.EventEmitter();
-  const everyMinute = 1 * 60 * 1000;
+  const everyFiveMinutes = 1 * 60 * 1000;
 
   const options = {
     token: {
@@ -38,7 +38,7 @@ module.exports = () => {
     });
 
 //    eventEmitter.emit('glucose', read());
-}, everyMinute);
+}, everyFiveMinutes);
 
   const api = {
     on: (message, callback) => eventEmitter.on(message, callback),
