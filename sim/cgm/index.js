@@ -1,8 +1,21 @@
 const events = require('events');
+var apn = require('apn');
 
 module.exports = () => {
   const eventEmitter = new events.EventEmitter();
   const everyFiveMinutes = 5 * 60 * 1000;
+
+  const options = {
+    token: {
+      key: "./AuthKey_23NRN4PHVP.p8",
+      keyId: "23NRN4PHVP",
+      teamId: "8ZWMLSD6JG"
+    },
+    production: false
+  };
+
+  const apnProvider = new apn.Provider(options);
+
   const latestGlucose = {
     readDate: new Date(0),
     glucose: null
@@ -13,6 +26,15 @@ module.exports = () => {
   setInterval(() => {
     latestGlucose.readDate = new Date(),
     latestGlucose.glucose = read();
+    let deviceToken = "c31ce3c0585db5744839accc7c6a6d42eb7649d0b9608b8df1757be077947240"
+
+    var note = new apn.Notification();
+    note.contentAvailable = 1;
+
+    apnProvider.send(note, deviceToken).then( (result) => {
+      // see documentation for an explanation of result
+    });
+
 //    eventEmitter.emit('glucose', read());
   }, everyFiveMinutes);
 
