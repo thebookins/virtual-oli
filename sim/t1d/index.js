@@ -30,7 +30,7 @@ module.exports = () => {
 
   return {
     // API (public) functions
-    eat: (meal) => model.eat(meals.carbs),
+    eat: (meal) => model.eat(meal.carbs),
     dose: (units) => {
       // iob += units;
     },
