@@ -56,6 +56,7 @@ export class GlucoseChartComponent implements OnInit {
     }
   ];
 
+  // NOTE: this isn't working cos I've changed the gluose API to return only one value
   getGlucose(): void {
     const now = Date.now();
     console.log("date is " + now);
