@@ -3,7 +3,7 @@ var apn = require('apn');
 
 module.exports = () => {
   const eventEmitter = new events.EventEmitter();
-  const everyFiveMinutes = 1 * 60 * 1000;
+  const everyFiveMinutes = 5 * 60 * 1000;
 
   const options = {
     token: {
@@ -33,10 +33,10 @@ module.exports = () => {
     note.sound = "";
     note.topic = "com.8ZWMLSD6JG.loopkit.Loop"
 
-    // apnProvider.send(note, deviceToken).then( (result) => {
-    //   console.log(JSON.stringify(result));
-    //   // see documentation for an explanation of result
-    // });
+    apnProvider.send(note, deviceToken).then( (result) => {
+      console.log(JSON.stringify(result));
+      // see documentation for an explanation of result
+    });
 
 //    eventEmitter.emit('glucose', read());
 }, everyFiveMinutes);
