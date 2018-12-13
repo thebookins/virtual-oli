@@ -62,7 +62,7 @@ app.post("/api/meals", function(req, res) {
     handleError(res, "Invalid user input", "Must provide carbs.", 400);
   }
 
-  t1d.eat(newMeal.carbs);
+  t1d.eat(newMeal);
   res.status(201).json(newMeal);
 });
 
