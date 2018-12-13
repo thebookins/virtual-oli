@@ -12,7 +12,7 @@ module.exports = () => {
   setInterval(() => {
     const dose = basal_rate_U_per_hour / 3600;
     deliver(basal_rate_U_per_hour / 3600);
-    reservoir -= dose;
+    state.reservoir -= dose;
   }, 1000);
 
   const api = {
