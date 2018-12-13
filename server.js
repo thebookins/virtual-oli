@@ -26,7 +26,7 @@ const t1d = require('./sim/t1d')();
 
 // cgm
 const cgm = require('./sim/cgm')();
-require('./sim/cgm/io')(io, cgm);
+const cgmAPI = require('./sim/cgm/io')(io, cgm);
 
 // pump
 const pump = require('./sim/pump')();
@@ -67,11 +67,17 @@ app.post("/api/meals", function(req, res) {
 });
 
 
-/*  "/api/glucose"
+/*  "/api/cgm"
  *    GET: returns the last three hours of glucose
  */
 
-app.get("/api/glucose", function(req, res) {
-  // res.status(200).json(GLUCOSE);
-  res.status(200).json(cgm.glucose);
-});
+// CGM endpoints
+app.get('/api/cgm', cgmAPI.latest)
+
+// // pump endpoints
+// app.get('/api/pump/history', ???)
+// app.get('/api/pump/basal', ???)
+// app.post('/api/pump/basal', ???)
+// app.post('/api/pump/temp')
+//
+// app.post('bolus', ???)
