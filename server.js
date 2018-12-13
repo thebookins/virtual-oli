@@ -3,8 +3,6 @@ var bodyParser = require("body-parser");
 var mongodb = require("mongodb");
 var ObjectID = mongodb.ObjectID;
 
-var PUMP_COLLECTION = "pump";
-
 const socketIO = require('socket.io');
 
 var app = express();
@@ -51,7 +49,7 @@ const cgmAPI = require('./sim/cgm/io')(io, cgm);
 
 // pump
 const pump = require('./sim/pump')();
-const pumpAPI = require('./sim/pump/io')(io, pump);
+const pumpAPI = require('./sim/pump/io')(io, pump, db);
 
 // hook up t1d, pump and cgm
 t1d.attachPump(pump);
@@ -95,8 +93,8 @@ app.post("/api/meals", function(req, res) {
 // CGM endpoints
 app.get('/api/cgm', cgmAPI.latest)
 
-app.get('/api/pump/history', pumpAPI.history)
-app.post('/api/pump/bolus', pumpAPI.bolus)
+app.get('/api/pump/', pumpAPI.history)
+app.post('/api/pump/', pumpAPI.post)
 // // pump endpoints
 // app.get('/api/pump/history', ???)
 // app.get('/api/pump/basal', ???)
