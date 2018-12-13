@@ -38,7 +38,7 @@ module.exports = (io, pump, db) => {
     history: function(req, res) {
       res.json([]);
     },
-    bolus: function(req, res) {
+    post: function(req, res) {
       var post = req.body;
 
       db.collection(PUMP_COLLECTION).insertOne(bolus, function(err, doc) {
