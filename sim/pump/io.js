@@ -3,7 +3,7 @@ module.exports = (io, pump) => {
 
   // pump.on('reservoir', (value) => nsp.emit('reservoir', value));
 
-  // NOTE: not sure of the wisom of separating pump from io
+  // NOTE: not sure of the wisdom of separating pump from io
   // wouldn't it be better to just run a single interval?
   setInterval(() => {
     nsp.emit('date', new Date().toTimeString());
@@ -18,4 +18,14 @@ module.exports = (io, pump) => {
       // TODO: implement
     })
   });
+
+  return {
+    history: function(req, res) {
+      res.json([]);
+    },
+    bolus: function(req, res) {
+      res.json([])
+    }
+
+  }
 }

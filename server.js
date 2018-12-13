@@ -30,7 +30,7 @@ const cgmAPI = require('./sim/cgm/io')(io, cgm);
 
 // pump
 const pump = require('./sim/pump')();
-require('./sim/pump/io')(io, pump);
+const pumpAPI = require('./sim/pump/io')(io, pump);
 
 // hook up t1d, pump and cgm
 t1d.attachPump(pump);
@@ -74,6 +74,8 @@ app.post("/api/meals", function(req, res) {
 // CGM endpoints
 app.get('/api/cgm', cgmAPI.latest)
 
+app.get('/api/pump/history', pumpAPI.history)
+app.post('/api/pump/bolus', pumpAPI.bolus)
 // // pump endpoints
 // app.get('/api/pump/history', ???)
 // app.get('/api/pump/basal', ???)
