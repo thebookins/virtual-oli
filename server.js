@@ -93,8 +93,9 @@ app.post("/api/meals", function(req, res) {
 // CGM endpoints
 app.get('/api/cgm', cgmAPI.latest)
 
-app.get('/api/pump/', pumpAPI.history)
-app.post('/api/pump/', pumpAPI.post)
+app.get('/api/pump', pumpAPI.history)
+app.get('/api/pump/status', pumpAPI.history)
+app.post('/api/pump', pumpAPI.post)
 // // pump endpoints
 // app.get('/api/pump/history', ???)
 // app.get('/api/pump/basal', ???)
