@@ -6,7 +6,7 @@ module.exports = (io, cgm) => {
 
   return {
     latest: function(req, res) {
-      res.render('api/cgm', cgm.glucose)
+      res.json(cgm.glucose)
     }
   }
 }
