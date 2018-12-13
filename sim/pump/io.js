@@ -29,7 +29,7 @@ module.exports = (io, pump, db) => {
         // batteryStatus,
         suspended: false,
         bolusing: false,
-        reservoir: 150,
+        reservoir: pump.reservoir,
         // model,
         // pumpID
       }
