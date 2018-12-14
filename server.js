@@ -27,6 +27,8 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI, function (err, database) {
   db = database;
   console.log("Database connection ready");
 
+  db.collection('status').update({}, {$inc: {reservoir: 10}}, {upsert: true});
+
   // Initialize the app.
   server = app.listen(process.env.PORT || 8080, function () {
     var port = server.address().port;
@@ -85,7 +87,6 @@ app.post("/api/meals", function(req, res) {
   res.status(201).json(newMeal);
 });
 
-db.collection('status').update({}, {$inc: {reservoir: 10}}, {upsert: true});
 
 /*  "/api/cgm"
  *    GET: returns the last three hours of glucose
