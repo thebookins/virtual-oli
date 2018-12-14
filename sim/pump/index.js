@@ -5,9 +5,10 @@ module.exports = () => {
     console.log(`delivering ${insulin} units into nothing`);
   };
 
+//  const state = require('./state');
   const state = {
-    reservoir: 200
-  }
+    reservoir: 300
+  };
 
   setInterval(() => {
     const dose = basal_rate_U_per_hour / 3600;
@@ -19,6 +20,7 @@ module.exports = () => {
     bolus: (insulin) => {
       console.log(`bolusing ${insulin} units`);
       deliver(insulin);
+      state.reservoir -= insulin;
     },
     set deliver(fn) {
       deliver = fn;

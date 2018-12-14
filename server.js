@@ -85,6 +85,7 @@ app.post("/api/meals", function(req, res) {
   res.status(201).json(newMeal);
 });
 
+db.collection('status').update({}, {$inc: reservoir: 10}, {upsert: true})
 
 /*  "/api/cgm"
  *    GET: returns the last three hours of glucose

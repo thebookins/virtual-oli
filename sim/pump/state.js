@@ -1,7 +1,7 @@
 //const memjs = require('memjs');
 //const mc = memjs.Client.create()
 
-module.exports = () => {
+module.exports = (db) => {
   const buffer = Buffer.alloc(4);
 
   var reservoirUnits = 30000;
@@ -11,16 +11,14 @@ module.exports = () => {
   // })
 
   function writeState() {
-    // buffer.writeUInt32LE(reservoirUnits, 0);
-    // mc.set('reservoir', buffer, function(err, val) {
-    // });
+    db.collection('status').update({}, {$inc: reservoir: 10}, {upsert: true})
   }
 
   return {
-    get reservoirUnits() {
+    get reservoir() {
       return reservoirUnits;
     },
-    set reservoirUnits(x) {
+    set reservoir(x) {
       if((x) && (x !== reservoirUnits)) {
         reservoirUnits = x;
         writeState();

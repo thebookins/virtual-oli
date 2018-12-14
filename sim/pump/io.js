@@ -1,4 +1,5 @@
 var PUMP_COLLECTION = "pump";
+const util = require('../../util')
 
 module.exports = (io, pump, db) => {
   const nsp = io.of('/pump');
@@ -41,14 +42,27 @@ module.exports = (io, pump, db) => {
     post: function(req, res) {
       var post = req.body;
 
-      db.collection(PUMP_COLLECTION).insertOne(bolus, function(err, doc) {
-        if (err) {
-          handleError(res, err.message, "Failed to create new expense.");
-        } else {
-          // TODO: bolus the t1d (do we have a reference???)
-          res.status(201).json(doc.ops[0]);
-        }
-      })
+      if (!post.command) {
+        util.handleError(res, "Invalid user input", "Must provide a command.", 400);
+      }
+
+      switch (post.command) {
+        case 'bolus':
+          pump.bolus(post.args.insulin)
+          break;
+        default:
+          // error: unknown command
+
+      }
+
+      // db.collection(PUMP_COLLECTION).insertOne(bolus, function(err, doc) {
+      //   if (err) {
+      //     handleError(res, err.message, "Failed to create new expense.");
+      //   } else {
+      //     // TODO: bolus the t1d (do we have a reference???)
+      //     res.status(201).json(doc.ops[0]);
+      //   }
+      // })
     }
   }
 }
