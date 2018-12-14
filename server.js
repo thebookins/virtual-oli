@@ -16,8 +16,6 @@ app.use(express.static(distDir));
 var db;
 var server;
 
-const huhui
-
 const urlElements = process.env.MONGODB_URI.split("/");
 const dbname = urlElements.pop();
 const url = urlElements.join("/");
