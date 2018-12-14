@@ -6,7 +6,7 @@ module.exports = () => {
   };
 
   const state = {
-    reservoir: 300
+    reservoir: 200
   }
 
   setInterval(() => {
