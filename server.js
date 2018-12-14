@@ -20,6 +20,7 @@ const urlElements = process.env.MONGODB_URI.split("/");
 const dbname = urlElements.pop();
 const url = urlElements.join("/");
 
+console.log(`url = ${url}`);
 console.log(`dbname = ${dbname}`);
 
 // Connect to the database before starting the application server.
