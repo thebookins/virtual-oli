@@ -16,15 +16,23 @@ app.use(express.static(distDir));
 var db;
 var server;
 
+const huhui
+
+const urlElements = process.env.MONGODB_URI.split("/");
+const dbname = urlElements.pop();
+const url = urlElements.join("/");
+
+console.log(`dbname = ${dbname}`);
+
 // Connect to the database before starting the application server.
-mongodb.MongoClient.connect(process.env.MONGODB_URI, function (err, database) {
+mongodb.MongoClient.connect(url, function (err, client) {
   if (err) {
     console.log(err);
     process.exit(1);
   }
 
   // Save database object from the callback for reuse.
-  db = database;
+  db = client.db(dbname);
   console.log("Database connection ready");
 
   db.collection('status').update({}, {$inc: {reservoir: 10}}, {upsert: true});
