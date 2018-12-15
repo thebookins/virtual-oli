@@ -26,10 +26,15 @@ module.exports = (db) => {
   let read = () => 0;
 
   setInterval(() => {
+    // TODO: lose the local variable here: use the db instead
     latestGlucose.readDate = new Date(),
     latestGlucose.glucose = read();
+    const latestGlucose2 = {
+      readDate: latestGlucose.readDate,
+      glucose: latestGlucose.glucose
+    }
 
-    db.collection('cgm').insertOne(latestGlucose, function(err, doc) {
+    db.collection('cgm').insertOne(latestGlucose2, function(err, doc) {
       if (err) {
         // handleError(res, err.message, "Failed to create new expense.");
         console.log(`Failed to insert glucose: ${err}.`);
