@@ -32,7 +32,7 @@ module.exports = (db) => {
     db.collection('cgm').insertOne(latestGlucose, function(err, doc) {
       if (err) {
         // handleError(res, err.message, "Failed to create new expense.");
-        console.log("Failed to create new expense.");
+        console.log(`Failed to insert glucose: ${err}.`);
       }
     });
 
