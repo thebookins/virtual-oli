@@ -1,7 +1,7 @@
 const events = require('events');
 var apn = require('apn');
 
-module.exports = () => {
+module.exports = (db) => {
   const eventEmitter = new events.EventEmitter();
   const everyFiveMinutes = 5 * 60 * 1000;
 
@@ -13,6 +13,8 @@ module.exports = () => {
     },
     production: false
   };
+
+  db.createCollection('123456', { capped : true, max : 36 } )
 
   const apnProvider = new apn.Provider(options);
 
@@ -26,6 +28,13 @@ module.exports = () => {
   setInterval(() => {
     latestGlucose.readDate = new Date(),
     latestGlucose.glucose = read();
+
+    db.collection('123456').insertOne(latestGlucose, function(err, doc) {
+      if (err) {
+        handleError(res, err.message, "Failed to create new expense.");
+      }
+    }
+
     let deviceToken = "c31ce3c0585db5744839accc7c6a6d42eb7649d0b9608b8df1757be077947240"
 
     var note = new apn.Notification();
