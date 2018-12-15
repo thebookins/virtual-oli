@@ -70,46 +70,46 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
   });
 
   setInterval(() => io.emit('time', new Date().toTimeString()), 1000);
+
+  //setTimeout(() => t1d.addPump(pump), 6000);
+
+
+  /*  "/api/meals"
+   *    GET: finds all meals
+   *    POST: adds a new meal
+   */
+
+  app.get("/api/meals", function(req, res) {
+    res.status(200).json(MEALS);
+  });
+
+  app.post("/api/meals", function(req, res) {
+    var newMeal = req.body;
+
+    if (!req.body.carbs) {
+      handleError(res, "Invalid user input", "Must provide carbs.", 400);
+    }
+
+    t1d.eat(newMeal);
+    res.status(201).json(newMeal);
+  });
+
+
+  /*  "/api/cgm"
+   *    GET: returns the last three hours of glucose
+   */
+
+  // CGM endpoints
+  app.get('/api/cgm', cgmAPI.latest);
+
+  // pump endpoints
+  app.get('/api/pump', pumpAPI.history);
+  app.post('/api/pump', pumpAPI.post);
+  app.get('/api/pump/status', pumpAPI.status);
+  // app.get('/api/pump/history', ???)
+  // app.get('/api/pump/basal', ???)
+  // app.post('/api/pump/basal', ???)
+  // app.post('/api/pump/temp')
+  //
+  // app.post('bolus', ???)
 });
-
-//setTimeout(() => t1d.addPump(pump), 6000);
-
-
-/*  "/api/meals"
- *    GET: finds all meals
- *    POST: adds a new meal
- */
-
-app.get("/api/meals", function(req, res) {
-  res.status(200).json(MEALS);
-});
-
-app.post("/api/meals", function(req, res) {
-  var newMeal = req.body;
-
-  if (!req.body.carbs) {
-    handleError(res, "Invalid user input", "Must provide carbs.", 400);
-  }
-
-  t1d.eat(newMeal);
-  res.status(201).json(newMeal);
-});
-
-
-/*  "/api/cgm"
- *    GET: returns the last three hours of glucose
- */
-
-// CGM endpoints
-app.get('/api/cgm', cgmAPI.latest);
-
-// pump endpoints
-app.get('/api/pump', pumpAPI.history);
-app.post('/api/pump', pumpAPI.post);
-app.get('/api/pump/status', pumpAPI.status);
-// app.get('/api/pump/history', ???)
-// app.get('/api/pump/basal', ???)
-// app.post('/api/pump/basal', ???)
-// app.post('/api/pump/temp')
-//
-// app.post('bolus', ???)
