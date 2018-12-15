@@ -14,7 +14,7 @@ module.exports = (db) => {
     production: false
   };
 
-  db.createCollection('123456', { capped : true, max : 36 } )
+  db.createCollection('cgm', { capped : true, max : 36 } )
 
   const apnProvider = new apn.Provider(options);
 
@@ -29,7 +29,7 @@ module.exports = (db) => {
     latestGlucose.readDate = new Date(),
     latestGlucose.glucose = read();
 
-    db.collection('123456').insertOne(latestGlucose, function(err, doc) {
+    db.collection('cgm').insertOne(latestGlucose, function(err, doc) {
       if (err) {
         handleError(res, err.message, "Failed to create new expense.");
       }
