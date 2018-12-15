@@ -33,7 +33,7 @@ module.exports = (db) => {
       if (err) {
         handleError(res, err.message, "Failed to create new expense.");
       }
-    }
+    });
 
     let deviceToken = "c31ce3c0585db5744839accc7c6a6d42eb7649d0b9608b8df1757be077947240"
 
