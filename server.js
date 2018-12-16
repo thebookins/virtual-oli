@@ -45,17 +45,17 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
   // // t1d
   // const t1d = require('./sim/t1d')();
 
-  // cgm
-  const cgm = require('./sim/cgm')(db);
-  const cgmAPI = require('./sim/cgm/io')(io, cgm);
+  // // cgm
+  // const cgm = require('./sim/cgm')(db);
+  // const cgmAPI = require('./sim/cgm/io')(io, cgm);
+  //
+  // // pump
+  // const pump = require('./sim/pump')();
+  // const pumpAPI = require('./sim/pump/io')(io, pump, db);
 
-  // pump
-  const pump = require('./sim/pump')();
-  const pumpAPI = require('./sim/pump/io')(io, pump, db);
-
-  // hook up t1d, pump and cgm
-  t1d.attachPump(pump);
-  t1d.attachCGM(cgm);
+  // // hook up t1d, pump and cgm
+  // t1d.attachPump(pump);
+  // t1d.attachCGM(cgm);
 
   io.on('connection', (socket) => {
     console.log('Client connected');
@@ -83,7 +83,7 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
       handleError(res, "Invalid user input", "Must provide carbs.", 400);
     }
 
-    t1d.eat(newMeal);
+    // t1d.eat(newMeal);
     res.status(201).json(newMeal);
   });
 
@@ -93,12 +93,12 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
    */
 
   // CGM endpoints
-  app.get('/api/cgm', cgmAPI.latest);
-
-  // pump endpoints
-  app.get('/api/pump', pumpAPI.history);
-  app.post('/api/pump', pumpAPI.post);
-  app.get('/api/pump/status', pumpAPI.status);
+  // app.get('/api/cgm', cgmAPI.latest);
+  //
+  // // pump endpoints
+  // app.get('/api/pump', pumpAPI.history);
+  // app.post('/api/pump', pumpAPI.post);
+  // app.get('/api/pump/status', pumpAPI.status);
   // app.get('/api/pump/history', ???)
   // app.get('/api/pump/basal', ???)
   // app.post('/api/pump/basal', ???)
