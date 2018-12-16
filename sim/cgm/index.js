@@ -15,6 +15,7 @@ module.exports = (db) => {
   };
 
   db.createCollection('cgm', { capped : true, size: 8192, max : 36 } )
+  // TODO: add error handler here
 
   const apnProvider = new apn.Provider(options);
 
