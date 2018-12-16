@@ -103,6 +103,8 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
     production: false
   };
 
+  const apnProvider = new apn.Provider(options);
+
   var glucose;
 
   // Consumer
