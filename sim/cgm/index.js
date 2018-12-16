@@ -14,7 +14,7 @@ module.exports = (db) => {
     production: false
   };
 
-  db.createCollection('cgm', { capped : true, max : 36 } )
+  db.createCollection('cgm', { capped : true, size: 8192, max : 36 } )
 
   const apnProvider = new apn.Provider(options);
 
