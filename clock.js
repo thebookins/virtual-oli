@@ -1,3 +1,4 @@
+// TODO: add logic for dropped update (i.e. during dyno restart)
 var cron = require('node-cron');
 
 var q = 'tasks';
