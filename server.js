@@ -92,6 +92,16 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
   var q = 'tasks';
   var url = process.env.CLOUDAMQP_URL || "amqp://localhost";
   var open = require('amqplib').connect(url);
+  var apn = require('apn');
+
+  const options = {
+    token: {
+      key: __dirname + "/sim/cgm/AuthKey_23NRN4PHVP.p8",
+      keyId: "23NRN4PHVP",
+      teamId: "8ZWMLSD6JG"
+    },
+    production: false
+  };
 
   // Consumer
   open.then(function(conn) {
@@ -102,6 +112,23 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
         if (msg !== null) {
           console.log(`received message: ${msg.content.toString()}`);
           ch.ack(msg);
+
+          let deviceToken = "c31ce3c0585db5744839accc7c6a6d42eb7649d0b9608b8df1757be077947240"
+
+          var note = new apn.Notification();
+          note.contentAvailable = 1;
+          // NOTE: probably not necessary to set this field...
+          // note.sound = "";
+          note.topic = "com.8ZWMLSD6JG.loopkit.Loop"
+
+          apnProvider.send(note, deviceToken).then( (result) => {
+            console.log(JSON.stringify({
+              readDate: new Date(),
+              glucose: 6.0
+            }));
+            // see documentation for an explanation of result
+          });
+
         }
       });
     });
