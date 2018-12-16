@@ -15,13 +15,6 @@ app.use(express.static(distDir));
 // Create a database variable outside of the database connection callback to reuse the connection pool in your app.
 var db;
 
-// const urlElements = process.env.MONGODB_URI.split("/");
-// const dbname = urlElements.pop();
-// const url = urlElements.join("/");
-//
-// console.log(`url = ${url}`);
-// console.log(`dbname = ${dbname}`);
-
 // Connect to the database before starting the application server.
 // TODO: try async / await here
 mongodb.MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
@@ -49,8 +42,8 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
     { date: new Date(), carbs: 5 }
   ];
 
-  // t1d
-  const t1d = require('./sim/t1d')();
+  // // t1d
+  // const t1d = require('./sim/t1d')();
 
   // cgm
   const cgm = require('./sim/cgm')(db);
