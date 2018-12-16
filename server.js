@@ -100,7 +100,7 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
       ch.assertQueue(q);
       ch.consume(q, function(msg) {
         if (msg !== null) {
-          console.log(msg.content.toString());
+          console.log(`received message: ${msg.content.toString()}`);
           ch.ack(msg);
         }
       });
