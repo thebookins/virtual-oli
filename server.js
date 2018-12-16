@@ -103,6 +103,8 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
     production: false
   };
 
+  var glucose;
+
   // Consumer
   open.then(function(conn) {
     var ok = conn.createChannel();
@@ -113,6 +115,11 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
           console.log(`received message: ${msg.content.toString()}`);
           ch.ack(msg);
 
+          glucose = {
+            readDate: new Date(),
+            glucose: 6.0
+          }
+
           let deviceToken = "c31ce3c0585db5744839accc7c6a6d42eb7649d0b9608b8df1757be077947240"
 
           var note = new apn.Notification();
@@ -122,10 +129,7 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
           note.topic = "com.8ZWMLSD6JG.loopkit.Loop"
 
           apnProvider.send(note, deviceToken).then( (result) => {
-            console.log(JSON.stringify({
-              readDate: new Date(),
-              glucose: 6.0
-            }));
+            console.log(JSON.stringify(result));
             // see documentation for an explanation of result
           });
 
@@ -142,9 +146,16 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
 
   // CGM endpoints
   // app.get('/api/cgm', cgmAPI.latest);
+  app.get('/api/cgm', function(req, res) {
+    res.json(glucose);
+  });
+
   //
   // // pump endpoints
   // app.get('/api/pump', pumpAPI.history);
+  app.get('/api/pump', function(req, res) {
+    res.json([]);
+  });
   // app.post('/api/pump', pumpAPI.post);
   // app.get('/api/pump/status', pumpAPI.status);
   // app.get('/api/pump/history', ???)
