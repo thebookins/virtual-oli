@@ -160,6 +160,20 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
   });
   // app.post('/api/pump', pumpAPI.post);
   // app.get('/api/pump/status', pumpAPI.status);
+  app.get('/api/pump/status', function(req, res) {
+    const status = {
+      // clock,
+      // batteryVolts,
+      // batteryStatus,
+      suspended: false,
+      bolusing: false,
+      reservoir: 0.6,
+      // model,
+      // pumpID
+    }
+    res.json(status);
+  },
+);
   // app.get('/api/pump/history', ???)
   // app.get('/api/pump/basal', ???)
   // app.post('/api/pump/basal', ???)
