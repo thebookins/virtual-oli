@@ -167,7 +167,7 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
       // batteryStatus,
       suspended: false,
       bolusing: false,
-      reservoir: 0.6,
+      reservoir: 80.5,
       // model,
       // pumpID
     }
