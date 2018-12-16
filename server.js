@@ -88,6 +88,27 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
   });
 
 
+  // NOTE: queue stuff: destined for a worker process - here now to save money!!!
+  var q = 'tasks';
+  var url = process.env.CLOUDAMQP_URL || "amqp://localhost";
+  var open = require('amqplib').connect(url);
+
+  // Consumer
+  open.then(function(conn) {
+    var ok = conn.createChannel();
+    ok = ok.then(function(ch) {
+      ch.assertQueue(q);
+      ch.consume(q, function(msg) {
+        if (msg !== null) {
+          console.log(msg.content.toString());
+          ch.ack(msg);
+        }
+      });
+    });
+    return ok;
+  }).then(null, console.warn);
+
+
   /*  "/api/cgm"
    *    GET: returns the last three hours of glucose
    */
