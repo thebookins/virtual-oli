@@ -21,7 +21,7 @@ const apnProvider = new apn.Provider(options);
 // Create a database variable outside of the database connection callback to reuse the connection pool in your app.
 let db;
 
-mongodb.MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
+MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
   if (err) {
     console.log(err);
     process.exit(1);
