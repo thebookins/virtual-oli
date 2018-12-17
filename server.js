@@ -98,7 +98,7 @@ app.post("/api/meals", function(req, res) {
 // CGM endpoints
 // app.get('/api/cgm', cgmAPI.latest);
 app.get('/api/cgm', function(req, res) {
-  db.collection(cgms).findOne({ 'id': 'ABCDEF' }, function(err, doc) {
+  db.collection('cgms').findOne({ 'id': 'ABCDEF' }, function(err, doc) {
     if (err) {
       console.log('Failed to get glucose');
     } else {
