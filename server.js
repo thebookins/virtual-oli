@@ -1,17 +1,18 @@
-var express = require("express");
-var bodyParser = require("body-parser");
+const express = require('express');
+const bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
 
+// TODO: this will eventually run in its own process;
+// no need to require here
 const worker = require('./worker');
-// var ObjectID = mongodb.ObjectID;
 
 const socketIO = require('socket.io');
 
-var app = express();
+const app = express();
 app.use(bodyParser.json());
 
 // Create link to Angular build directory
-var distDir = __dirname + "/dist/virtual-oli/";
+const distDir = __dirname + '/dist/virtual-oli/';
 app.use(express.static(distDir));
 
 // Create a database variable outside of the database connection callback to reuse the connection pool in your app.
@@ -97,7 +98,13 @@ app.post("/api/meals", function(req, res) {
 // CGM endpoints
 // app.get('/api/cgm', cgmAPI.latest);
 app.get('/api/cgm', function(req, res) {
-  res.json(worker.glucose);
+  db.collection(cgms).findOne({ 'id': 'ABCDEF' }, function(err, doc) {
+    if (err) {
+      console.log('Failed to get glucose');
+    } else {
+      res.status(200).json(doc);
+    }
+  });
 });
 
 //
