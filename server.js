@@ -1,6 +1,8 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 const MongoClient = require('mongodb').MongoClient;
+
+const worker = require('./worker');
 // var ObjectID = mongodb.ObjectID;
 
 const socketIO = require('socket.io');
@@ -95,7 +97,7 @@ app.post("/api/meals", function(req, res) {
 // CGM endpoints
 // app.get('/api/cgm', cgmAPI.latest);
 app.get('/api/cgm', function(req, res) {
-  res.json({});
+  res.json(worker.glucose);
 });
 
 //
