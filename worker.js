@@ -32,16 +32,16 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
   console.log("Database connection ready");
 });
 
-const sendAPN = () => {
+function sendAPN() {
   var note = new apn.Notification();
   note.contentAvailable = 1;
   note.topic = "com.8ZWMLSD6JG.loopkit.Loop"
   apnProvider.send(note, deviceToken).then( (result) => {
     console.log(JSON.stringify(result));
   });
-};
+}
 
-const updateCGM = () => {
+function updateCGM() {
   // TODO: this collection needs to be created somewhere
   db.collection('cgms').update({'id': 'ABCDEF'}, {$set: { 'readDate': new Date(), 'glucose': 6.0 }}, {upsert: true});
   db.collection('cgm').insertOne({readDate: new Date(), glucose: 6.0}, function(err, doc) {
@@ -50,7 +50,7 @@ const updateCGM = () => {
     }
     sendAPN();
   });
-};
+}
 
 // Consumer
 open.then(function(conn) {
