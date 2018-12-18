@@ -12,7 +12,7 @@ cron.schedule('*/5 * * * *', () => {
     var ok = conn.createChannel();
     ok = ok.then(function(ch) {
       ch.assertQueue(q);
-      ch.sendToQueue(q, new Buffer('something to do'));
+      ch.sendToQueue(q, new Buffer(new Date()));
     });
     return ok;
   }).then(null, console.warn);
