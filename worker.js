@@ -41,10 +41,10 @@ function sendAPN() {
   });
 }
 
-function updateCGM() {
+function updateCGM(timestamp) {
   // TODO: this collection needs to be created somewhere
   db.collection('cgms').update({'id': 'ABCDEF'}, {$set: { 'readDate': new Date(), 'glucose': 6.0 }}, {upsert: true});
-  db.collection('cgm').insertOne({readDate: new Date(), glucose: 6.0}, function(err, doc) {
+  db.collection('cgm').insertOne({readDate: new Date(timestamp), glucose: 6.0}, function(err, doc) {
     if (err) {
       console.log(`Failed to insert glucose: ${err}.`);
     }
@@ -62,7 +62,7 @@ open.then(function(conn) {
         console.log(`received message: ${msg.content.toString()}`);
         ch.ack(msg);
         // MY CODE here
-        updateCGM();
+        updateCGM(parseFloat(msg.content.toString()));
         // END MY CODE
       }
     });
