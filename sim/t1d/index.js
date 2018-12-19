@@ -2,8 +2,8 @@
 // We can defer the decision for now.
 const Model = require('marjorie');
 
-module.exports = () => {
- const model = Model(1);
+module.exports = (state) => {
+ const model = Model(1, state);
 
  let insulinPending_mU = 0;
  let cgm = null;
@@ -50,9 +50,7 @@ module.exports = () => {
       return model.glucose;
     },
     get state() {
-      return {
-        glucose: 6.0
-      };
+      return model.state;
     },
     attachCGM(cgm) {
       cgm.read = () => model.glucose;
