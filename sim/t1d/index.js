@@ -53,7 +53,7 @@ module.exports = () => {
       return {
         glucose: 6.0
       };
-    }
+    },
     attachCGM(cgm) {
       cgm.read = () => model.glucose;
     },
