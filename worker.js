@@ -5,6 +5,8 @@ const url = process.env.CLOUDAMQP_URL || "amqp://localhost";
 const open = require('amqplib').connect(url);
 const apn = require('apn');
 
+const t1d = require('./sim/t1d')();
+
 const options = {
   token: {
     key: __dirname + "/sim/cgm/AuthKey_23NRN4PHVP.p8",
@@ -41,9 +43,14 @@ function sendAPN() {
   });
 }
 
-function updateCGM(timestamp) {
+function update(timestamp) {
+  for (let n = 0; n < 5; n+=1) {
+    console.log('stepping t1d');
+    t1d.step();
+  }
+
   // TODO: this collection needs to be created somewhere
-  db.collection('cgms').update({'id': 'ABCDEF'}, {$set: { 'readDate': new Date(), 'glucose': 6.0 }}, {upsert: true});
+  db.collection('cgms').update({'id': 'ABCDEF'}, {$set: { 'readDate': new Date(), 'glucose': t1d.glucose }}, {upsert: true});
   db.collection('cgm').insertOne({readDate: new Date(timestamp), glucose: 6.0}, function(err, doc) {
     if (err) {
       console.log(`Failed to insert glucose: ${err}.`);
@@ -62,7 +69,7 @@ open.then(function(conn) {
         console.log(`received message: ${msg.content.toString()}`);
         ch.ack(msg);
         // MY CODE here
-        updateCGM(parseFloat(msg.content.toString()));
+        update(parseFloat(msg.content.toString()));
         // END MY CODE
       }
     });
