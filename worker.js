@@ -5,6 +5,8 @@ const url = process.env.CLOUDAMQP_URL || "amqp://localhost";
 const open = require('amqplib').connect(url);
 const apn = require('apn');
 
+// TODO: not sure if we can keep a persistent reference here:
+// what if another dyno is running?
 const t1d = require('./sim/t1d')();
 
 const options = {
@@ -48,6 +50,7 @@ function update(timestamp) {
     console.log('stepping t1d');
     t1d.step();
   }
+  db.collection('t1ds').update({'id': 'ABCDEF'}, {t1d.state}, {upsert: true});
 
   // TODO: this collection needs to be created somewhere
   db.collection('cgms').update({'id': 'ABCDEF'}, {$set: { 'readDate': new Date(), 'glucose': t1d.glucose }}, {upsert: true});

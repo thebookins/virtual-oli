@@ -49,6 +49,11 @@ module.exports = () => {
     get glucose() {
       return model.glucose;
     },
+    get state() {
+      return {
+        glucose: 6.0;
+      };
+    }
     attachCGM(cgm) {
       cgm.read = () => model.glucose;
     },
