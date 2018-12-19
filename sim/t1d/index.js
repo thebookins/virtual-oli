@@ -51,7 +51,7 @@ module.exports = () => {
     },
     get state() {
       return {
-        glucose: 6.0;
+        glucose: 6.0
       };
     }
     attachCGM(cgm) {
