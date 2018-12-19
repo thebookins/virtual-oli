@@ -50,6 +50,7 @@ module.exports = (state) => {
       return model.glucose;
     },
     get state() {
+      console.log(`state: ${model.state}`)
       return model.state;
     },
     attachCGM(cgm) {
