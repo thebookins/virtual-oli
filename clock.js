@@ -5,17 +5,21 @@ var q = 'tasks';
 var url = process.env.CLOUDAMQP_URL || "amqp://localhost";
 var open = require('amqplib').connect(url);
 
+let ch;
+
+open.then(function(conn) {
+  var ok = conn.createChannel();
+  ok = ok.then(function(c) {
+    c.assertQueue(q);
+    ch = c;
+  });
+  return ok;
+}).then(null, console.warn);
+
 cron.schedule('*/5 * * * *', () => {
   console.log('running a task every five minutes');
   // Publisher
-  open.then(function(conn) {
-    var ok = conn.createChannel();
-    ok = ok.then(function(ch) {
-      ch.assertQueue(q);
-      ch.sendToQueue(q, new Buffer(Date.now().toString()));
-    });
-    return ok;
-  }).then(null, console.warn);
+  ch.sendToQueue(q, new Buffer(Date.now().toString()));
 });
 
 // var q = 'tasks';
