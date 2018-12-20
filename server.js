@@ -1,30 +1,25 @@
-var express = require("express");
-var bodyParser = require("body-parser");
-var mongodb = require("mongodb");
-var ObjectID = mongodb.ObjectID;
+const express = require('express');
+const bodyParser = require('body-parser');
+const MongoClient = require('mongodb').MongoClient;
+
+// TODO: this will eventually run in its own process;
+// no need to require here
+const worker = require('./worker');
 
 const socketIO = require('socket.io');
 
-var app = express();
+const app = express();
 app.use(bodyParser.json());
 
 // Create link to Angular build directory
-var distDir = __dirname + "/dist/virtual-oli/";
+const distDir = __dirname + '/dist/virtual-oli/';
 app.use(express.static(distDir));
 
 // Create a database variable outside of the database connection callback to reuse the connection pool in your app.
-var db;
-
-// const urlElements = process.env.MONGODB_URI.split("/");
-// const dbname = urlElements.pop();
-// const url = urlElements.join("/");
-//
-// console.log(`url = ${url}`);
-// console.log(`dbname = ${dbname}`);
+let db;
 
 // Connect to the database before starting the application server.
-// TODO: try async / await here
-mongodb.MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
+MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
   if (err) {
     console.log(err);
     process.exit(1);
@@ -34,6 +29,7 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
   db = client.db();
   console.log("Database connection ready");
 
+  // NOTE: THIS SHOULD BE DELETED; JUST FOR TESTING
   db.collection('status').update({}, {$inc: {reservoir: 10}}, {upsert: true});
 
   // Initialize the app.
@@ -41,75 +37,100 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
     var port = server.address().port;
     console.log("App now running on port", port);
   });
+});
+
+// const io = socketIO(server);
+
+const MEALS = [
+  { date: new Date(), value: 6 },
+  { date: new Date(), carbs: 5 }
+];
+
+// // t1d
+// const t1d = require('./sim/t1d')();
+
+// // cgm
+// const cgm = require('./sim/cgm')(db);
+// const cgmAPI = require('./sim/cgm/io')(io, cgm);
+//
+// // pump
+// const pump = require('./sim/pump')();
+// const pumpAPI = require('./sim/pump/io')(io, pump, db);
+
+// // hook up t1d, pump and cgm
+// t1d.attachPump(pump);
+// t1d.attachCGM(cgm);
+
+// io.on('connection', (socket) => {
+//   console.log('Client connected');
+//   socket.on('disconnect', () => console.log('Client disconnected'));
+// });
+
+// setInterval(() => io.emit('time', new Date().toTimeString()), 1000);
+
+//setTimeout(() => t1d.addPump(pump), 6000);
 
 
-  const io = socketIO(server);
-  const MEALS = [
-    { date: new Date(), value: 6 },
-    { date: new Date(), carbs: 5 }
-  ];
+/*  "/api/meals"
+ *    GET: finds all meals
+ *    POST: adds a new meal
+ */
 
-  // t1d
-  const t1d = require('./sim/t1d')();
+app.get("/api/meals", function(req, res) {
+  res.status(200).json(MEALS);
+});
 
-  // cgm
-  const cgm = require('./sim/cgm')(db);
-  const cgmAPI = require('./sim/cgm/io')(io, cgm);
+app.post("/api/meals", function(req, res) {
+  var newMeal = req.body;
 
-  // pump
-  const pump = require('./sim/pump')();
-  const pumpAPI = require('./sim/pump/io')(io, pump, db);
+  if (!req.body.carbs) {
+    handleError(res, "Invalid user input", "Must provide carbs.", 400);
+  }
 
-  // hook up t1d, pump and cgm
-  t1d.attachPump(pump);
-  t1d.attachCGM(cgm);
+  // t1d.eat(newMeal);
+  res.status(201).json(newMeal);
+});
 
-  io.on('connection', (socket) => {
-    console.log('Client connected');
-    socket.on('disconnect', () => console.log('Client disconnected'));
-  });
+/*  "/api/cgm"
+ *    GET: returns the last three hours of glucose
+ */
 
-  setInterval(() => io.emit('time', new Date().toTimeString()), 1000);
-
-  //setTimeout(() => t1d.addPump(pump), 6000);
-
-
-  /*  "/api/meals"
-   *    GET: finds all meals
-   *    POST: adds a new meal
-   */
-
-  app.get("/api/meals", function(req, res) {
-    res.status(200).json(MEALS);
-  });
-
-  app.post("/api/meals", function(req, res) {
-    var newMeal = req.body;
-
-    if (!req.body.carbs) {
-      handleError(res, "Invalid user input", "Must provide carbs.", 400);
+// CGM endpoints
+// app.get('/api/cgm', cgmAPI.latest);
+app.get('/api/cgm', function(req, res) {
+  db.collection('cgms').findOne({ 'id': 'ABCDEF' }, function(err, doc) {
+    if (err) {
+      console.log('Failed to get glucose');
+    } else {
+      res.status(200).json(doc);
     }
-
-    t1d.eat(newMeal);
-    res.status(201).json(newMeal);
   });
+});
 
-
-  /*  "/api/cgm"
-   *    GET: returns the last three hours of glucose
-   */
-
-  // CGM endpoints
-  app.get('/api/cgm', cgmAPI.latest);
-
-  // pump endpoints
-  app.get('/api/pump', pumpAPI.history);
-  app.post('/api/pump', pumpAPI.post);
-  app.get('/api/pump/status', pumpAPI.status);
+//
+// // pump endpoints
+// app.get('/api/pump', pumpAPI.history);
+app.get('/api/pump', function(req, res) {
+  res.json([]);
+});
+// app.post('/api/pump', pumpAPI.post);
+// app.get('/api/pump/status', pumpAPI.status);
+app.get('/api/pump/status', function(req, res) {
+  const status = {
+    // clock,
+    // batteryVolts,
+    // batteryStatus,
+    suspended: false,
+    bolusing: false,
+    reservoir: 80.5,
+    // model,
+    // pumpID
+  }
+  res.json(status);
+});
   // app.get('/api/pump/history', ???)
   // app.get('/api/pump/basal', ???)
   // app.post('/api/pump/basal', ???)
   // app.post('/api/pump/temp')
   //
   // app.post('bolus', ???)
-});
