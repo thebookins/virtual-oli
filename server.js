@@ -17,11 +17,6 @@ open.then(function(conn) {
   return ok;
 }).then(null, console.warn);
 
-  ch.sendToQueue(q, new Buffer(Date.now().toString()));
-});
-
-
-
 // TODO: this will eventually run in its own process;
 // no need to require here
 const worker = require('./worker');
