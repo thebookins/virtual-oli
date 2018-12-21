@@ -4,6 +4,7 @@ const q = 'tasks';
 const url = process.env.CLOUDAMQP_URL || "amqp://localhost";
 const open = require('amqplib').connect(url);
 const apn = require('apn');
+const Pump = require('./sim/pump');
 
 // TODO: not sure if we can keep a persistent reference here:
 // what if another dyno is running?
@@ -45,6 +46,8 @@ MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
       state = doc;
     }
     t1d = T1d(state);
+    const pump = Pump();
+    t1d.attachPump(pump);
   });
 });
 

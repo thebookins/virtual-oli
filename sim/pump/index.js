@@ -10,13 +10,12 @@ module.exports = () => {
     reservoir: 300
   };
 
-  setInterval(() => {
-    const dose = basal_rate_U_per_hour / 3600;
-    deliver(basal_rate_U_per_hour / 3600);
-    state.reservoir -= dose;
-  }, 1000);
-
   const api = {
+    step: () => {
+      const dose = basal_rate_U_per_hour / 3600;
+      deliver(basal_rate_U_per_hour / 3600);
+      state.reservoir -= dose;
+    },
     bolus: (insulin) => {
       console.log(`bolusing ${insulin} units`);
       deliver(insulin);
