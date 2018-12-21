@@ -2,6 +2,26 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
 
+const q = 'tasks';
+const url = process.env.CLOUDAMQP_URL || "amqp://localhost";
+const open = require('amqplib').connect(url);
+
+let ch;
+
+open.then(function(conn) {
+  var ok = conn.createChannel();
+  ok = ok.then(function(c) {
+    c.assertQueue(q);
+    ch = c;
+  });
+  return ok;
+}).then(null, console.warn);
+
+  ch.sendToQueue(q, new Buffer(Date.now().toString()));
+});
+
+
+
 // TODO: this will eventually run in its own process;
 // no need to require here
 const worker = require('./worker');
@@ -87,6 +107,7 @@ app.post("/api/meals", function(req, res) {
     handleError(res, "Invalid user input", "Must provide carbs.", 400);
   }
 
+  ch.sendToQueue(q, new Buffer('eat'));
   // t1d.eat(newMeal);
   res.status(201).json(newMeal);
 });

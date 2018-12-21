@@ -6,26 +6,24 @@ module.exports = () => {
   };
 
 //  const state = require('./state');
-  const state = {
-    reservoir: 300
-  };
+  let reservoir: 300
 
   const api = {
     step: () => {
       const dose = basal_rate_U_per_hour / 3600;
       deliver(basal_rate_U_per_hour / 3600);
-      state.reservoir -= dose;
+      reservoir -= dose;
     },
     bolus: (insulin) => {
       console.log(`bolusing ${insulin} units`);
       deliver(insulin);
-      state.reservoir -= insulin;
+      reservoir -= insulin;
     },
     set deliver(fn) {
       deliver = fn;
     },
     get reservoir() {
-      return state.reservoir;
+      return reservoir;
     }
   };
 

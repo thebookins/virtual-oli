@@ -85,9 +85,17 @@ open.then(function(conn) {
       if (msg !== null) {
         console.log(`received message: ${msg.content.toString()}`);
         ch.ack(msg);
+
         // MY CODE here
-        update(parseFloat(msg.content.toString()));
+        if (msg.content.toString() === 'eat') {
+          console.log('eating');
+          // TODO: update model before and save state after eating
+          t1d.eat( { carbs: 100 } );
+        } else {
+          update(parseFloat(msg.content.toString()));
+        }
         // END MY CODE
+
       }
     });
   });
