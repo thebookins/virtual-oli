@@ -6,7 +6,7 @@ module.exports = () => {
   };
 
 //  const state = require('./state');
-  let reservoir: 300
+  let reservoir = 300;
 
   const api = {
     step: () => {
