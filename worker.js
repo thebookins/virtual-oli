@@ -7,7 +7,7 @@ const apn = require('apn');
 
 // TODO: not sure if we can keep a persistent reference here:
 // what if another dyno is running?
-const t1d = require('./sim/t1d')();
+const T1d = require('./sim/t1d');
 
 const options = {
   token: {
@@ -24,6 +24,7 @@ const apnProvider = new apn.Provider(options);
 
 // Create a database variable outside of the database connection callback to reuse the connection pool in your app.
 let db;
+let t1d;
 
 MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
   if (err) {
@@ -34,6 +35,18 @@ MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
   // Save database object from the callback for reuse.
   db = client.db();
   console.log("Database connection ready");
+
+  let state = {};
+  db.collection('t1d').findOne({}, function(err, doc) {
+    if (err) {
+      console.log('Failed to get t1d');
+    } else {
+      console.log('Got t1d from db');
+      state = doc;
+    }
+  });
+
+  t1d = T1d(state);
 });
 
 function sendAPN() {
