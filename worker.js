@@ -44,9 +44,8 @@ MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
       console.log('Got t1d from db');
       state = doc;
     }
+    t1d = T1d(state);
   });
-
-  t1d = T1d(state);
 });
 
 function sendAPN() {
@@ -60,7 +59,6 @@ function sendAPN() {
 
 function update(timestamp) {
   for (let n = 0; n < 5; n+=1) {
-    console.log('stepping t1d');
     t1d.step();
   }
   db.collection('t1d').update({}, t1d.state, {upsert: true});
