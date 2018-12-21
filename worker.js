@@ -26,6 +26,8 @@ const apnProvider = new apn.Provider(options);
 // Create a database variable outside of the database connection callback to reuse the connection pool in your app.
 let db;
 let t1d;
+const pump = Pump();
+
 
 MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
   if (err) {
@@ -46,7 +48,6 @@ MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
       state = doc;
     }
     t1d = T1d(state);
-    const pump = Pump();
     t1d.attachPump(pump);
   });
 });
@@ -63,8 +64,11 @@ function sendAPN() {
 function update(timestamp) {
   for (let n = 0; n < 5; n+=1) {
     t1d.step();
+    pump.step();
   }
   db.collection('t1d').update({}, t1d.state, {upsert: true});
+
+  db.collection('pump').update({}, pump.state, {upsert: true});
 
   // TODO: this collection needs to be created somewhere
   db.collection('cgms').update({'id': 'ABCDEF'}, {$set: { 'readDate': new Date(), 'glucose': t1d.glucose }}, {upsert: true});
