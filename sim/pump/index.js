@@ -24,7 +24,19 @@ module.exports = () => {
     },
     get reservoir() {
       return reservoir;
-    }
+    },
+    get state() {
+      return {
+        // clock,
+        // batteryVolts,
+        // batteryStatus,
+        suspended: false,
+        bolusing: false,
+        reservoir,
+        // model,
+        // pumpID
+      };
+    },
   };
 
   return api;

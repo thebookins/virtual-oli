@@ -101,9 +101,7 @@ app.post("/api/meals", function(req, res) {
   if (!req.body.carbs) {
     handleError(res, "Invalid user input", "Must provide carbs.", 400);
   }
-
   ch.sendToQueue(q, new Buffer('eat'));
-  // t1d.eat(newMeal);
   res.status(201).json(newMeal);
 });
 
@@ -132,17 +130,13 @@ app.get('/api/pump', function(req, res) {
 // app.post('/api/pump', pumpAPI.post);
 // app.get('/api/pump/status', pumpAPI.status);
 app.get('/api/pump/status', function(req, res) {
-  const status = {
-    // clock,
-    // batteryVolts,
-    // batteryStatus,
-    suspended: false,
-    bolusing: false,
-    reservoir: 80.5,
-    // model,
-    // pumpID
-  }
-  res.json(status);
+  db.collection('pump').findOne({}, function(err, doc) {
+    if (err) {
+      console.log('Failed to get pump');
+    } else {
+      res.status(200).json(doc);
+    }
+  });
 });
   // app.get('/api/pump/history', ???)
   // app.get('/api/pump/basal', ???)
