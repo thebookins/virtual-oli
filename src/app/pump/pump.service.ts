@@ -1,16 +1,23 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 
+import { Command } from './command';
 import { MessageService } from '../message.service';
 
 import * as io from 'socket.io-client';
+
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
 
 @Injectable({
   providedIn: 'root'
 })
 export class PumpService {
+  private pumpUrl = '/api/pump';  // URL to web api
   private pumpSocketUrl = '/pump';
   private socket;
 
@@ -33,9 +40,23 @@ export class PumpService {
   }
 
   // NOTE: this is using the socket. It could just use HTTP put?
-  bolus() {
-    this.socket.emit('bolus', 1);
+  // bolus() {
+  //   this.socket.emit('bolus', 1);
+  // }
+
+  /** POST: add a new meal to the server */
+  bolus(): Observable<Command> {
+    const bolus: Command = {
+        type: 'bolus',
+        dose: 1,
+    };
+
+    return this.http.post<Command>(this.pumpUrl, bolus, httpOptions).pipe(
+      // tap((meal: Meal) => this.log(`added meal w/ carbs=${meal.carbs}`)),
+      // catchError(this.handleError<Meal>('addMeal'))
+    );
   }
+
 
   /** Log a PumpService message with the MessageService */
   private log(message: string) {
