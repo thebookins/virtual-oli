@@ -1,4 +1,4 @@
-module.exports = () => {
+module.exports = (state) => {
   const basal_rate_U_per_hour = 10;
 
   let deliver = (insulin) => {
@@ -6,7 +6,7 @@ module.exports = () => {
   };
 
 //  const state = require('./state');
-  let reservoir = 300;
+  let { reservoir, suspended, bolusing } = state;
 
   const api = {
     step: () => {
