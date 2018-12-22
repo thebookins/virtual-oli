@@ -52,7 +52,7 @@ MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
   });
 
 
-  let state = {};
+  state = {};
   db.collection('pump').findOne({}, function(err, doc) {
     if (err) {
       console.log('Failed to get pump');
