@@ -26,7 +26,7 @@ const apnProvider = new apn.Provider(options);
 // Create a database variable outside of the database connection callback to reuse the connection pool in your app.
 let db;
 let t1d;
-const pump = Pump();
+let pump;
 
 
 MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
@@ -39,6 +39,7 @@ MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
   db = client.db();
   console.log("Database connection ready");
 
+  // load t1d
   let state = {};
   db.collection('t1d').findOne({}, function(err, doc) {
     if (err) {
@@ -48,6 +49,20 @@ MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
       state = doc;
     }
     t1d = T1d(state);
+  });
+
+
+  let state = {};
+  db.collection('pump').findOne({}, function(err, doc) {
+    if (err) {
+      console.log('Failed to get pump');
+    } else {
+      console.log('Got pump from db');
+      state = doc;
+    }
+    pump = Pump(state);
+
+    // hook them up
     t1d.attachPump(pump);
   });
 });

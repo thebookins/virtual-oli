@@ -1,4 +1,4 @@
-module.exports = (state) => {
+module.exports = (state = { reservoir: 300, suspended: false, bolusing: false }) => {
   const basal_rate_U_per_hour = 10;
 
   let deliver = (insulin) => {
@@ -10,8 +10,8 @@ module.exports = (state) => {
 
   const api = {
     step: () => {
-      const dose = basal_rate_U_per_hour / 3600;
-      deliver(basal_rate_U_per_hour / 3600);
+      const dose = basal_rate_U_per_hour / 60;
+      deliver(dose);
       reservoir -= dose;
     },
     bolus: (insulin) => {
