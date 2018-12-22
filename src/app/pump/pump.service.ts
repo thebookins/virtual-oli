@@ -21,7 +21,10 @@ export class PumpService {
   private pumpSocketUrl = '/pump';
   private socket;
 
-  constructor(private messageService: MessageService) { }
+  constructor(
+    private http: HttpClient,
+    private messageService: MessageService
+  ) { }
 
   get date(): Observable<Date> {
     let observable = new Observable<Date>(observer => {
