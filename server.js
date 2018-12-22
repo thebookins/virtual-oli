@@ -126,12 +126,11 @@ app.get('/api/cgm', function(req, res) {
 // // pump endpoints
 // app.get('/api/pump', pumpAPI.history);
 app.get('/api/pump', function(req, res) {
-  db.collection('history').find({}, function(err, doc) {
+  db.collection('history').find({}).toArray(function(err, docs) {
     if (err) {
       console.log('Failed to get pump history');
     } else {
-      console.log(JSON.stringify(doc));
-      res.status(200).json(doc);
+      res.status(200).json(docs);
     }
   });
 });
