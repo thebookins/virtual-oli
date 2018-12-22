@@ -49,13 +49,14 @@ export class PumpService {
 
   /** POST: add a new meal to the server */
   bolus(): Observable<Command> {
+    console.log('in bolus')
     const bolus: Command = {
         type: 'bolus',
         dose: 1,
     };
 
     return this.http.post<Command>(this.pumpUrl, bolus, httpOptions).pipe(
-      // tap((meal: Meal) => this.log(`added meal w/ carbs=${meal.carbs}`)),
+      tap((command: Command) => this.log('sent command'))
       // catchError(this.handleError<Meal>('addMeal'))
     );
   }
