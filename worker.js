@@ -114,7 +114,7 @@ open.then(function(conn) {
           console.log('bolusing');
           pump.bolus(1)
           .then(b => {
-            db.collection('history').insertOne({date: new Date(), type: 'bolus', dose: b});
+            db.collection('history').insertOne({datestamp: new Date(), type: 'bolus', dose: b});
           });
         } else {
           update(parseFloat(msg.content.toString()));
