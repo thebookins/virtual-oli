@@ -126,7 +126,7 @@ app.get('/api/cgm', function(req, res) {
 // // pump endpoints
 // app.get('/api/pump', pumpAPI.history);
 app.get('/api/pump', function(req, res) {
-  db.collection('history').findOne({}, function(err, doc) {
+  db.collection('history').find({}, function(err, doc) {
     if (err) {
       console.log('Failed to get pump history');
     } else {
