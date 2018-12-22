@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Command } from './command';
 import { PumpService } from './pump.service';
 
 @Component({
@@ -15,7 +16,7 @@ export class PumpComponent implements OnInit {
 
   bolus(insulin: number): void {
     if (!insulin) { return; }
-    this.pumpService.bolus({ type: 'bolus', insulin } as Command)
+    this.pumpService.bolus({ type: 'bolus', dose: insulin } as Command)
       .subscribe(command => {
         // this.meals.push(meal);
       });
