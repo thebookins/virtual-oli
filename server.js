@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
 
 const q = 'tasks';
+
 const url = process.env.CLOUDAMQP_URL || "amqp://localhost";
 const open = require('amqplib').connect(url);
 
@@ -125,9 +126,29 @@ app.get('/api/cgm', function(req, res) {
 // // pump endpoints
 // app.get('/api/pump', pumpAPI.history);
 app.get('/api/pump', function(req, res) {
-  res.json([]);
+  db.collection('history').find({}, function(err, doc) {
+    if (err) {
+      console.log('Failed to get pump history');
+    } else {
+      res.status(200).json(doc);
+    }
+  });
 });
-// app.post('/api/pump', pumpAPI.post);
+
+app.post('/api/pump', function(req, res) {
+  var command = req.body;
+
+  // TODO: validation
+  // if (!req.body.carbs) {
+  //   handleError(res, "Invalid user input", "Must provide carbs.", 400);
+  // }
+
+  // TODO: give the pump its own queue
+  // TODO: actually use the payload
+  ch.sendToQueue(q, new Buffer('bolus'));
+  res.status(201).json(command);
+});
+
 // app.get('/api/pump/status', pumpAPI.status);
 app.get('/api/pump/status', function(req, res) {
   db.collection('pump').findOne({}, function(err, doc) {
@@ -138,9 +159,10 @@ app.get('/api/pump/status', function(req, res) {
     }
   });
 });
+
+// app.get('/api/pump/basal', ???)
+// app.post('/api/pump/basal', ???)
+
   // app.get('/api/pump/history', ???)
-  // app.get('/api/pump/basal', ???)
-  // app.post('/api/pump/basal', ???)
   // app.post('/api/pump/temp')
   //
-  // app.post('bolus', ???)

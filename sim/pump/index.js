@@ -15,9 +15,21 @@ module.exports = (state = { reservoir: 300, suspended: false, bolusing: false })
       reservoir -= dose;
     },
     bolus: (insulin) => {
-      console.log(`bolusing ${insulin} units`);
-      deliver(insulin);
-      reservoir -= insulin;
+      const promise = new Promise(function(resolve, reject) {
+        console.log(`bolusing ${insulin} units`);
+        deliver(insulin);
+        reservoir -= insulin;
+        if (true) {
+          // TODO: handle to case of cancelled bolus here
+          resolve(insulin);
+        }
+        else {
+          // TODO: if the pump rejected the bolus
+          // because already bolusing, out of insulin or what not
+          reject(Error("It broke"));
+        }
+      });
+      return promise;
     },
     set deliver(fn) {
       deliver = fn;

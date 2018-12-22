@@ -110,6 +110,12 @@ open.then(function(conn) {
           console.log('eating');
           // TODO: update model before and save state after eating
           t1d.eat( { carbs: 100 } );
+        } else if (msg.content.toString() === 'bolus') {
+          console.log('bolusing');
+          pump.bolus(1)
+          .then(b => {
+            db.collection('history').insertOne({date: new Date(), type: 'bolus', dose: b});
+          });
         } else {
           update(parseFloat(msg.content.toString()));
         }
