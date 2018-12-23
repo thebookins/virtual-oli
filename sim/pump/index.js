@@ -31,6 +31,9 @@ module.exports = (state = { reservoir: 300, suspended: false, bolusing: false })
       });
       return promise;
     },
+    reset: () => {
+      reservoir = 300;
+    },
     set deliver(fn) {
       deliver = fn;
     },

@@ -4,5 +4,5 @@
 
 export class Command {
   type: String;
-  dose: number;
+  dose: number?;
 }

@@ -112,10 +112,13 @@ open.then(function(conn) {
           t1d.eat( { carbs: 100 } );
         } else if (msg.content.toString() === 'bolus') {
           console.log('bolusing');
-          pump.bolus(1)
+          pump.bolus(1);
           .then(b => {
             db.collection('history').insertOne({datestamp: new Date(), type: 'bolus', dose: b});
           });
+        } else if (msg.content.toString() === 'reset') {
+          console.log('resetting');
+          pump.reset();
         } else {
           update(parseFloat(msg.content.toString()));
         }

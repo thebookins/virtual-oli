@@ -22,6 +22,13 @@ export class PumpComponent implements OnInit {
       });
   }
 
+  reset(): void {
+    this.pumpService.bolus({ type: 'reset' } as Command)
+      .subscribe(command => {
+        // this.meals.push(meal);
+      });
+  }
+
   ngOnInit() {
     this.sub = this.pumpService.date.subscribe(date => this.date = date);
   }
