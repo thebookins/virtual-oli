@@ -130,7 +130,7 @@ open.then(function(conn) {
             // TODO: then, save the pump state
             break;
           case 'setTempBasal':
-            console.log('settingTempBasal');
+            console.log(`settingTempBasal of ${command.dose} for ${command.duration} minutes.`);
             // TODO: first, update the model
             // TODO: promisify this
             pump.setTempBasal(command.dose, command.duration);
@@ -139,8 +139,9 @@ open.then(function(conn) {
               datestamp: new Date(),
               type: 'temp basal',
               rate: command.dose,
-              duration: command.duration
+              duration: command.duration,
             });
+            break;
           default:
             update(parseFloat(msg.content.toString()));
         }
