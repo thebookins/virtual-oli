@@ -1,18 +1,25 @@
-module.exports = (state = { reservoir: 300, suspended: false, bolusing: false }) => {
-  const basal_rate_U_per_hour = 10;
+module.exports = (state = { reservoir: 300, suspended: false, bolusing: false, temp: null }) => {
+  const basal_rate_U_per_hour = 1;
 
   let deliver = (insulin) => {
     console.log(`delivering ${insulin} units into nothing`);
   };
 
 //  const state = require('./state');
-  let { reservoir, suspended, bolusing } = state;
+  let { reservoir, suspended, bolusing, temp } = state;
 
   const api = {
     step: () => {
-      const dose = basal_rate_U_per_hour / 60;
+      const currentBasalRate = temp ? temp.rate : basal_rate_U_per_hour;
+      const dose = currentBasalRate / 60;
       deliver(dose);
       reservoir -= dose;
+      if (temp) {
+        temp.timeRemaining -= 1;
+        if (temp.timeRemaining <= 0) {
+          temp = null;
+        }
+      }
     },
     bolus: (insulin) => {
       const promise = new Promise(function(resolve, reject) {
@@ -30,6 +37,12 @@ module.exports = (state = { reservoir: 300, suspended: false, bolusing: false })
         }
       });
       return promise;
+    },
+    setTempBasal: (rate, duration) => {
+      temp = {rate, timeRemaining: duration};
+    },
+    cancelTempBasal: () => {
+      temp = null;
     },
     reset: () => {
       reservoir = 300;

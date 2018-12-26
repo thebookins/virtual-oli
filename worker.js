@@ -123,6 +123,9 @@ open.then(function(conn) {
           // TODO: first, update the model
           pump.reset();
           // TODO: then, save the pump state
+        } else if (msg.content.toString() === 'setTempBasal') {
+          console.log('settingTempBasal');
+          pump.setTempBasal(5, 30);
         } else {
           update(parseFloat(msg.content.toString()));
         }
