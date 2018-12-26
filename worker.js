@@ -103,33 +103,48 @@ open.then(function(conn) {
     ch.consume(q, function(msg) {
       if (msg !== null) {
         console.log(`received message: ${msg.content.toString()}`);
+        const command = JSON.parse(msg.content);
+
         ch.ack(msg);
 
         // MY CODE here
-        if (msg.content.toString() === 'eat') {
-          console.log('eating');
-          // TODO: update model before and save state after eating
-          t1d.eat( { carbs: 100 } );
-        } else if (msg.content.toString() === 'bolus') {
-          console.log('bolusing');
-          // TODO: first, update the model
-          pump.bolus(1)
-          // TODO: then, save the pump state
-          .then(b => {
-            db.collection('history').insertOne({datestamp: new Date(), type: 'bolus', dose: b});
-          });
-        } else if (msg.content.toString() === 'reset') {
-          console.log('resetting');
-          // TODO: first, update the model
-          pump.reset();
-          // TODO: then, save the pump state
-        } else if (msg.content.toString() === 'setTempBasal') {
-          console.log('settingTempBasal');
-          pump.setTempBasal(5, 30);
-        } else {
-          update(parseFloat(msg.content.toString()));
+        switch(command.type) {
+          case 'eat':
+            console.log('eating');
+            // TODO: update model before and save state after eating
+            t1d.eat( { carbs: 100 } );
+            break;
+          case 'bolus':
+            console.log('bolusing');
+            // TODO: first, update the model
+            pump.bolus(command.dose)
+            // TODO: then, save the pump state
+            .then(b => {
+              db.collection('history').insertOne({datestamp: new Date(), type: 'bolus', dose: b});
+            });
+            break;
+          case 'reset':
+            console.log('resetting');
+            // TODO: first, update the model
+            pump.reset();
+            // TODO: then, save the pump state
+            break;
+          case 'setTempBasal':
+            console.log('settingTempBasal');
+            // TODO: first, update the model
+            // TODO: promisify this
+            pump.setTempBasal(command.dose, command.duration);
+            // TODO: then, save the pump state
+            db.collection('history').insertOne({
+              datestamp: new Date(),
+              type: 'temp basal',
+              rate: command.dose,
+              duration: command.duration
+            });
+          default:
+            update(parseFloat(msg.content.toString()));
         }
-        // END MY CODE
+        // MY CODE here
 
       }
     });

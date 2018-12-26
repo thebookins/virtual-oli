@@ -24,7 +24,7 @@ export class PumpComponent implements OnInit {
 
   setTempBasal(rate: number, duration: number): void {
     if (!duration) { return; }
-    this.pumpService.bolus({ type: 'setTempBasal', dose: rate } as Command)
+    this.pumpService.bolus({ type: 'setTempBasal', dose: rate, duration: duration } as Command)
       .subscribe(command => {
         // this.meals.push(meal);
       });

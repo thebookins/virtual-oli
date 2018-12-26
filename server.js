@@ -145,7 +145,7 @@ app.post('/api/pump', function(req, res) {
 
   // TODO: give the pump its own queue
   // TODO: actually use the payload
-  ch.sendToQueue(q, new Buffer(command.type));
+  ch.sendToQueue(q, new Buffer(JSON.stringify(command)));
   res.status(201).json(command);
 });
 
