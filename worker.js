@@ -76,6 +76,7 @@ function sendAPN() {
   });
 }
 
+// TODO: this is susceptible to crashing if t1d or pump are undefined at this point in time
 function update(timestamp) {
   for (let n = 0; n < 5; n+=1) {
     t1d.step();
@@ -100,6 +101,8 @@ open.then(function(conn) {
   var ok = conn.createChannel();
   ok = ok.then(function(ch) {
     ch.assertQueue(q);
+    // TODO: check if we need to do this
+    ch.ackAll();
     ch.consume(q, function(msg) {
       if (msg !== null) {
         ch.ack(msg);
