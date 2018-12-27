@@ -102,10 +102,10 @@ open.then(function(conn) {
     ch.assertQueue(q);
     ch.consume(q, function(msg) {
       if (msg !== null) {
+        ch.ack(msg);
         console.log(`received message: ${msg.content.toString()}`);
         const command = JSON.parse(msg.content);
 
-        ch.ack(msg);
 
         // MY CODE here
         switch(command.type) {
