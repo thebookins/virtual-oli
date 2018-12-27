@@ -102,7 +102,7 @@ app.post("/api/meals", function(req, res) {
   if (!req.body.carbs) {
     handleError(res, "Invalid user input", "Must provide carbs.", 400);
   }
-  ch.sendToQueue(q, new Buffer('eat'));
+  ch.sendToQueue(q, new Buffer(JSON.stringify({type: 'eat'})));
   res.status(201).json(newMeal);
 });
 
