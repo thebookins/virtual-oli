@@ -1,6 +1,6 @@
 // NOTE: this module might better belong in the marjorie library. Not sure.
 // We can defer the decision for now.
-const Model = require('marjorie');
+const { Pump, Model } = require('marjorie');
 
 module.exports = (state) => {
  const model = Model(1, state);
