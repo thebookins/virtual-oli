@@ -136,7 +136,7 @@ open.then(function(conn) {
             console.log(`settingTempBasal of ${command.dose} for ${command.duration} minutes.`);
             // TODO: first, update the model
             // TODO: promisify this
-            pump.setTempBasal(command.dose, command.duration);
+            pump.basal.setTemp(command.dose, command.duration);
             // TODO: then, save the pump state
             db.collection('history').insertOne({
               datestamp: new Date(),
