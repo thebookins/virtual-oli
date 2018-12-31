@@ -4,7 +4,7 @@ const q = 'tasks';
 const url = process.env.CLOUDAMQP_URL || "amqp://localhost";
 const open = require('amqplib').connect(url);
 const apn = require('apn');
-const { Pump } = require('marjorie');
+const Pump = require('marjorie').Pump;
 
 // TODO: not sure if we can keep a persistent reference here:
 // what if another dyno is running?
