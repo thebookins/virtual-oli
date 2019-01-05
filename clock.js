@@ -17,6 +17,7 @@ open.then(function(conn) {
 }).then(null, console.warn);
 
 cron.schedule('*/5 * * * *', () => {
+  // NOTE: should we run this every minute perhaps???
   console.log('running a task every five minutes');
   // Publisher
   ch.sendToQueue(q, new Buffer(Date.now().toString()));
