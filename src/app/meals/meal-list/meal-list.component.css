@@ -71,3 +71,7 @@ button.delete {
   background-color: gray !important;
   color: white;
 }
+
+mat-chip {
+  max-width: 200px;
+}
