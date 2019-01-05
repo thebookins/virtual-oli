@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ChartsModule } from 'ng2-charts';
 
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { AppComponent } from './app.component';
 import { GlucoseDetailsComponent } from './glucose/glucose-details/glucose-details.component';
@@ -27,7 +28,8 @@ import { PumpComponent } from './pump/pump.component';
     BrowserAnimationsModule,
     HttpClientModule,
     ChartsModule,
-    MatTabsModule
+    MatTabsModule,
+    MatChipsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
