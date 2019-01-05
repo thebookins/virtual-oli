@@ -9,12 +9,15 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatExpansionModule } from '@angular/material/expansion';
 
 import { AppComponent } from './app.component';
-import { GlucoseDetailsComponent } from './glucose/glucose-details/glucose-details.component';
-import { MealListComponent } from './meals/meal-list/meal-list.component';
-import { MessagesComponent } from './messages/messages.component';
-import { GlucoseChartComponent } from './glucose/glucose-chart/glucose-chart.component';
-import { PumpComponent } from './pump/pump.component';
+
 import { PwdComponent } from './pwd/pwd.component';
+import { GlucoseDetailsComponent } from './glucose/glucose-details/glucose-details.component';
+import { GlucoseChartComponent } from './glucose/glucose-chart/glucose-chart.component';
+import { MealListComponent } from './meals/meal-list/meal-list.component';
+
+import { PumpComponent } from './pump/pump.component';
+
+import { MessagesComponent } from './messages/messages.component';
 
 @NgModule({
   declarations: [
