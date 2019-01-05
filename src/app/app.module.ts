@@ -1,7 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { ChartsModule } from 'ng2-charts';
+
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { AppComponent } from './app.component';
 import { GlucoseDetailsComponent } from './glucose/glucose-details/glucose-details.component';
@@ -21,8 +24,10 @@ import { PumpComponent } from './pump/pump.component';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
-    ChartsModule
+    ChartsModule,
+    MatTabsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

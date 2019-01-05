@@ -1,8 +1,15 @@
 <h1>{{title}}</h1>
-<app-glucose-details></app-glucose-details>
-<app-glucose-chart></app-glucose-chart>
+<mat-tab-group>
+  <mat-tab label="Person">
+    <app-meal-list></app-meal-list>
+    <app-glucose-details></app-glucose-details>
+    <app-glucose-chart></app-glucose-chart>
+  </mat-tab>
+  <mat-tab label="Pump">
+    <app-pump></app-pump>
+  </mat-tab>
+  <mat-tab label="CGM">
+  </mat-tab>
+</mat-tab-group>
 
-<h2>Pump</h2>
-<app-pump></app-pump>
-<app-meal-list></app-meal-list>
 <app-messages></app-messages>
