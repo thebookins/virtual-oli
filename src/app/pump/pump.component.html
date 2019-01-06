@@ -1,9 +1,9 @@
 <span *ngIf="date">{{ date }}</span>
 <p>
-  <button class="bolus"
+  <button mat-raised-button class="bolus"
         (click)="bolus(1)">Bolus</button>
-  <button class="bolus"
+  <button mat-raised-button class="bolus"
               (click)="setTempBasal(5, 30)">Temp basal</button>
-  <button
+  <button mat-raised-button
         (click)="reset()">Fill reservoir</button>
 </p>

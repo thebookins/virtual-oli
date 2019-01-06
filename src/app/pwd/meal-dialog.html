@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>Hi {{data.protein}}</h1>
+<div mat-dialog-content>
+  <p>What are you eating?</p>
+  <mat-form-field>
+    <input matInput placeholder="Carbs (g)" [(ngModel)]="data.carbs">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Protein (g)" [(ngModel)]="data.protein">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Fat (g)" [(ngModel)]="data.fat">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="data.carbs" cdkFocusInitial>Ok</button>
+</div>

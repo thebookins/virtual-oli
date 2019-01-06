@@ -4,13 +4,20 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { ChartsModule } from 'ng2-charts';
 
+import { MatButtonModule } from '@angular/material/button'
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatDividerModule } from '@angular/material/divider';
+
 
 import { AppComponent } from './app.component';
 
-import { PwdComponent } from './pwd/pwd.component';
+import { PwdComponent, MealDialogComponent } from './pwd/pwd.component';
 import { GlucoseDetailsComponent } from './glucose/glucose-details/glucose-details.component';
 import { GlucoseChartComponent } from './glucose/glucose-chart/glucose-chart.component';
 import { MealListComponent } from './meals/meal-list/meal-list.component';
@@ -27,16 +34,26 @@ import { MessagesComponent } from './messages/messages.component';
     MessagesComponent,
     GlucoseChartComponent,
     PumpComponent,
-    PwdComponent
+    PwdComponent,
+    MealDialogComponent
+  ],
+  entryComponents: [
+    MealDialogComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
     ChartsModule,
+    MatButtonModule,
     MatTabsModule,
     MatChipsModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    FormsModule,
+    MatInputModule,
+    MatDividerModule
   ],
   providers: [],
   bootstrap: [AppComponent]
