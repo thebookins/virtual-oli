@@ -12,7 +12,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
-import { MatDividerModule } from '@angular/material/divider';
 
 
 import { AppComponent } from './app.component';
@@ -52,8 +51,7 @@ import { MessagesComponent } from './messages/messages.component';
     MatDialogModule,
     MatFormFieldModule,
     FormsModule,
-    MatInputModule,
-    MatDividerModule
+    MatInputModule
   ],
   providers: [],
   bootstrap: [AppComponent]

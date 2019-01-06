@@ -1,6 +1,6 @@
 # Development notes
 
-## Avatar (patient) api
+## PWD api
 Things we might want to do with the patient.
  - eat(meal): meal may contain things in addition to carbs (e.g. fat, protein)
  - fingerstick(): return blood glucose
@@ -29,12 +29,14 @@ Things that we will need:
   - people (one document per person, containing id, user? lastUpdated, all model state)
   - users
 
-
-   return {
-     dose: (units) => {
-       // iob += units;
-     },
-
-     sense: () => model.glucose,
-   };
- }
+## Message architecture
+### `clock` (producer)
+ - send an update message once every minute to the worker (the minimum delta for the model)
+### `server` (producer and consumer)
+ - on GET just query the database and return the requested value
+ - on POST send the command message
+ - on pump clock event relay this to connected sockets
+### `worker`: (producer and consumer)
+ - on update message update the model to the requested time (the cgm will issue an APN once every five minutes)
+ - on command message do what it says
+ - on pump clock event relay this message to the server
