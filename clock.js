@@ -1,6 +1,7 @@
 // TODO: add logic for dropped update (i.e. during dyno restart)
 var cron = require('node-cron');
 
+// TODO: change this to 'work'???
 var q = 'tasks';
 var url = process.env.CLOUDAMQP_URL || "amqp://localhost";
 var open = require('amqplib').connect(url);
@@ -16,9 +17,9 @@ open.then(function(conn) {
   return ok;
 }).then(null, console.warn);
 
-cron.schedule('*/5 * * * *', () => {
+cron.schedule('* * * * *', () => {
   // NOTE: should we run this every minute perhaps???
-  console.log('running a task every five minutes');
+  console.log('running a task every minute');
   // Publisher
   ch.sendToQueue(q, new Buffer(Date.now().toString()));
 });
