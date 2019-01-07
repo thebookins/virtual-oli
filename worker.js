@@ -62,6 +62,11 @@ MongoClient.connect(process.env.MONGODB_URI, function (err, client) {
     }
     pump = Pump(state);
 
+    pump.on('status', status => {
+      console.log(`got status ${JSON.stringify(status)}`);
+      ch.sendToQueue('pump', new Buffer(JSON.stringify(status)));
+    });
+
     // hook them up
     t1d.attachPump(pump);
   });
@@ -77,11 +82,12 @@ function sendAPN() {
 }
 
 // TODO: this is susceptible to crashing if t1d or pump are undefined at this point in time
+// TODO: really should be an update to time function, in case of dyno downtime
 function update(timestamp) {
-  for (let n = 0; n < 5; n+=1) {
-    t1d.step();
-    pump.step();
-  }
+  t1d.step();
+  pump.step();
+
+  // TODO: rather than update these here, have it driven by events
   db.collection('t1d').update({}, t1d.state, {upsert: true});
 
   db.collection('pump').update({}, pump.state, {upsert: true});
@@ -96,11 +102,15 @@ function update(timestamp) {
   });
 }
 
+var ch;
 // Consumer
 open.then(function(conn) {
   var ok = conn.createChannel();
-  ok = ok.then(function(ch) {
+  ok = ok.then(function(c) {
+    ch = c;
     ch.assertQueue(q);
+    ch.assertQueue('pump');
+
     // TODO: check if we need to do this
     ch.ackAll();
     ch.consume(q, function(msg) {

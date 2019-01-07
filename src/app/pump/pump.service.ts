@@ -42,6 +42,22 @@ export class PumpService {
     );
   }
 
+  // TODO: bundle pump status into a class with a single getter that returns an observable
+  get reservoir(): Observable<Number> {
+    let observable = new Observable<Number>(observer => {
+      // TODO: we probably don't need to connect to the socket again each time
+      this.socket = io('/pump');
+      this.socket.on('reservoir', (value) => {
+        observer.next(value);
+      });
+      return () => {
+        this.socket.disconnect();
+      };
+    })
+    return observable.pipe(
+      tap(reservoir => this.log(`got pump reservoir ${reservoir}`))
+    );
+  }
   // NOTE: this is using the socket. It could just use HTTP put?
   // bolus() {
   //   this.socket.emit('bolus', 1);

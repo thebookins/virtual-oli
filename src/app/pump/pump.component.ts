@@ -9,8 +9,10 @@ import { PumpService } from './pump.service';
 })
 export class PumpComponent implements OnInit {
   date: Date = null;
+  reservoir: Number = null;
 
-  private sub: any;
+  private dateSub: any;
+  private reservoirSub: any;
 
   constructor(private pumpService: PumpService) { }
 
@@ -38,10 +40,12 @@ export class PumpComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.sub = this.pumpService.date.subscribe(date => this.date = date);
+    this.dateSub = this.pumpService.date.subscribe(date => this.date = date);
+    this.reservoirSub = this.pumpService.reservoir.subscribe(reservoir => this.reservoir = reservoir);
   }
 
   ngOnDestroy() {
-    this.sub.unsubscribe();
+    this.dateSub.unsubscribe();
+    this.reservoirSub.unsubscribe();
   }
 }

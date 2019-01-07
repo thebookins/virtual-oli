@@ -9,19 +9,9 @@ const open = require('amqplib').connect(url);
 
 let ch;
 
-open.then(function(conn) {
-  var ok = conn.createChannel();
-  ok = ok.then(function(c) {
-    c.assertQueue(q);
-    ch = c;
-  });
-  return ok;
-}).then(null, console.warn);
-
 // TODO: this will eventually run in its own process;
 // no need to require here
-const worker = require('./worker');
-
+//const worker = require('./worker');
 const socketIO = require('socket.io');
 
 const app = express();
@@ -48,7 +38,12 @@ MongoClient.connect(process.env.MONGODB_URI)
   process.exit(1);
 });
 
-// TODO: please find a better name
+const MEALS = [
+  { date: new Date(), value: 6 },
+  { date: new Date(), carbs: 5 }
+];
+
+
 function init(db) {
   const server = app.listen(process.env.PORT || 8080, function () {
     var port = server.address().port;
@@ -56,11 +51,39 @@ function init(db) {
   });
   const io = socketIO(server);
 
-  // const pumpNsp = io.of('/pump');
-  // // a placeholder for a clock event that is provided by the real pump
-  // setInterval(() => {
-  //   pumpNsp.emit('clock', new Date().toTimeString());
-  // }, 60 * 1000);
+  io.on('connection', (socket) => {
+    console.log('Client connected');
+    socket.on('disconnect', () => console.log('Client disconnected'));
+  });
+
+
+  const pumpNsp = io.of('/pump');
+
+  open.then(function(conn) {
+    var ok = conn.createChannel();
+    ok = ok.then(function(c) {
+
+      c.assertQueue(q);
+      ch = c;
+
+      ch.assertQueue('pump');
+      ch.consume('pump', function(msg) {
+        if (msg !== null) {
+          console.log(msg.content.toString());
+          const status = JSON.parse(msg.content);
+          pumpNsp.emit('reservoir', status.reservoir);
+
+          // TODO: get the real date from the status
+          pumpNsp.emit('date', new Date().toTimeString());
+
+          ch.ack(msg);
+        }
+      });
+
+    });
+    return ok;
+  }).then(null, console.warn);
+
 
   app.get("/api/meals", function(req, res) {
     res.status(200).json(MEALS);
@@ -139,10 +162,6 @@ function init(db) {
 
 }
 
-// const MEALS = [
-//   { date: new Date(), value: 6 },
-//   { date: new Date(), carbs: 5 }
-// ];
 
 // // t1d
 // const t1d = require('./sim/t1d')();
@@ -162,10 +181,6 @@ function init(db) {
 // t1d.attachPump(pump);
 // t1d.attachCGM(cgm);
 
-// io.on('connection', (socket) => {
-//   console.log('Client connected');
-//   socket.on('disconnect', () => console.log('Client disconnected'));
-// });
 
 // setInterval(() => io.emit('time', new Date().toTimeString()), 1000);
 

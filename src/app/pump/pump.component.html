@@ -1,4 +1,5 @@
 <span *ngIf="date">{{ date }}</span>
+
 <p>
   <button mat-raised-button class="bolus"
         (click)="bolus(1)">Bolus</button>
@@ -7,3 +8,5 @@
   <button mat-raised-button
         (click)="reset()">Fill reservoir</button>
 </p>
+
+<p class="mat-body-strong">Reservoir: {{ reservoir }}</p>

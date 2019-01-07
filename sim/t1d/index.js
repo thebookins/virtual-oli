@@ -1,7 +1,7 @@
-const Model = require('marjorie').Model;
+const PWD = require('marjorie').PWD;
 
 module.exports = (state) => {
- const model = Model(1, state);
+ const model = PWD(1, state);
 
  let insulinPending_mU = 0;
  let cgm = null;
