@@ -1,7 +1,9 @@
 const PWD = require('marjorie').PWD;
+const events = require('events');
 
 module.exports = (state) => {
  const model = PWD(1, state);
+ const eventEmitter = new events.EventEmitter();
 
  let insulinPending_mU = 0;
  let cgm = null;
@@ -11,8 +13,12 @@ module.exports = (state) => {
     step: () => {
       model.step(insulinPending_mU);
       insulinPending_mU = 0;
+      eventEmitter.emit('status', model.state);
     },
-    eat: (meal) => model.eat(meal.carbs),
+    eat: (meal) => {
+      model.eat(meal.carbs);
+      eventEmitter.emit('status', model.state);
+    },
     dose: (units) => {
       // iob += units;
     },
@@ -30,15 +36,16 @@ module.exports = (state) => {
     get glucose() {
       return model.glucose;
     },
-    get state() {
-      console.log(`state: ${model.state}`)
-      return model.state;
-    },
+    // get state() {
+    //   console.log(`state: ${model.state}`)
+    //   return model.state;
+    // },
     attachCGM(cgm) {
       cgm.read = () => model.glucose;
     },
     removeCGM: (cgm) => {
       // TODO: implement
-    }
+    },
+    on: (message, callback) => eventEmitter.on(message, callback),
   };
 }

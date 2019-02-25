@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Command } from './command';
+import { Status } from './status';
 import { PumpService } from './pump.service';
 
 @Component({
@@ -8,11 +9,10 @@ import { PumpService } from './pump.service';
   styleUrls: ['./pump.component.css']
 })
 export class PumpComponent implements OnInit {
-  date: Date = null;
+  status: Status = null;
   reservoir: Number = null;
 
-  private dateSub: any;
-  private reservoirSub: any;
+  private sub: any;
 
   constructor(private pumpService: PumpService) { }
 
@@ -40,12 +40,10 @@ export class PumpComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dateSub = this.pumpService.date.subscribe(date => this.date = date);
-    this.reservoirSub = this.pumpService.reservoir.subscribe(reservoir => this.reservoir = reservoir);
+    this.sub = this.pumpService.status.subscribe(status => this.status = status);
   }
 
   ngOnDestroy() {
-    this.dateSub.unsubscribe();
-    this.reservoirSub.unsubscribe();
+    this.sub.unsubscribe();
   }
 }

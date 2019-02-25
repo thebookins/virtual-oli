@@ -1,4 +1,4 @@
-<span *ngIf="date">{{ date }}</span>
+<span *ngIf="date">{{ status.clock }}</span>
 
 <p>
   <button mat-raised-button class="bolus"
@@ -9,4 +9,6 @@
         (click)="reset()">Fill reservoir</button>
 </p>
 
-<p class="mat-body-strong">Reservoir: {{ reservoir }}</p>
+<p class="mat-body-strong">Reservoir: {{ status.reservoir }}</p>
+
+<app-pumphistory></app-pumphistory>

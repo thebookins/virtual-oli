@@ -24,6 +24,7 @@ import { MealListComponent } from './meals/meal-list/meal-list.component';
 import { PumpComponent } from './pump/pump.component';
 
 import { MessagesComponent } from './messages/messages.component';
+import { HistoryComponent } from './pump/history/history.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { MessagesComponent } from './messages/messages.component';
     GlucoseChartComponent,
     PumpComponent,
     PwdComponent,
-    MealDialogComponent
+    MealDialogComponent,
+    HistoryComponent
   ],
   entryComponents: [
     MealDialogComponent

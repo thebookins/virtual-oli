@@ -1,5 +1,6 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { PwdService } from './pwd.service';
 
 export interface DialogData {
   carbs: number;
@@ -18,7 +19,12 @@ export class PwdComponent implements OnInit {
   protein: number;
   fat: number;
 
-  constructor(public dialog: MatDialog) { }
+  // reservoir: Number = null;
+  status: Number = null;
+
+  private sub: any;
+
+  constructor(public dialog: MatDialog, private pwdService: PwdService) { }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(MealDialogComponent, {
@@ -33,8 +39,12 @@ export class PwdComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.sub = this.pwdService.status.subscribe(value => this.status = value);
   }
 
+  ngOnDestroy() {
+    this.sub.unsubscribe();
+  }
 }
 
 @Component({

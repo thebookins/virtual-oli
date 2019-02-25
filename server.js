@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
 
-const q = 'tasks';
+const q = 'work';
 
 const url = process.env.CLOUDAMQP_URL || "amqp://localhost";
 const open = require('amqplib').connect(url);
@@ -56,8 +56,8 @@ function init(db) {
     socket.on('disconnect', () => console.log('Client disconnected'));
   });
 
-
   const pumpNsp = io.of('/pump');
+  const t1dNsp = io.of('/t1d');
 
   open.then(function(conn) {
     var ok = conn.createChannel();
@@ -71,11 +71,17 @@ function init(db) {
         if (msg !== null) {
           console.log(msg.content.toString());
           const status = JSON.parse(msg.content);
-          pumpNsp.emit('reservoir', status.reservoir);
+          pumpNsp.emit('status', status);
+          ch.ack(msg);
+        }
+      });
 
-          // TODO: get the real date from the status
-          pumpNsp.emit('date', new Date().toTimeString());
-
+      ch.assertQueue('t1d');
+      ch.consume('t1d', function(msg) {
+        if (msg !== null) {
+          console.log(msg.content.toString());
+          const status = JSON.parse(msg.content);
+          t1dNsp.emit('status', status);
           ch.ack(msg);
         }
       });
@@ -138,6 +144,7 @@ function init(db) {
 
     // TODO: give the pump its own queue
     // TODO: actually use the payload
+    console.log(`sending ${JSON.stringify(command)}`)
     ch.sendToQueue(q, new Buffer(JSON.stringify(command)));
     res.status(201).json(command);
   });
@@ -147,6 +154,16 @@ function init(db) {
     db.collection('pump').findOne({}, function(err, doc) {
       if (err) {
         console.log('Failed to get pump');
+      } else {
+        res.status(200).json(doc);
+      }
+    });
+  });
+
+  app.get('/api/t1d/status', function(req, res) {
+    db.collection('t1d').findOne({}, function(err, doc) {
+      if (err) {
+        console.log('Failed to get t1d');
       } else {
         res.status(200).json(doc);
       }
