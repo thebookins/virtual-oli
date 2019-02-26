@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Status } from './status';
 import { PwdService } from './pwd.service';
 
 export interface DialogData {
@@ -20,7 +21,7 @@ export class PwdComponent implements OnInit {
   fat: number;
 
   // reservoir: Number = null;
-  status: Number = null;
+  status: Status = null;
 
   private sub: any;
 

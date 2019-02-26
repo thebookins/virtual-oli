@@ -18,7 +18,7 @@ const httpOptions = {
 })
 export class PwdService {
   private t1dStatusUrl = '/api/t1d/status';  // URL to web api
-  private t1dSocketUrl = '/t1d';
+//  private t1dSocketUrl = '/t1d';
   private socket;
 
   constructor(
@@ -26,16 +26,16 @@ export class PwdService {
     private messageService: MessageService
   ) { }
 
-  get status(): Observable<Number> {
-    let observable = new Observable<Number>(observer => {
+  get status(): Observable<Status> {
+    let observable = new Observable<Status>(observer => {
       // TODO: we probably don't need to connect to the socket again each time
-      this.socket = io('/t1d');
+      this.socket = io(this.t1dStatusUrl);
       this.http.get<Status>(this.t1dStatusUrl)
         .subscribe(status => {
-          observer.next(status.glucose.accessible.Q);
+          observer.next(status);
         });
       this.socket.on('status', (value) => {
-        observer.next(value.glucose.accessible.Q);
+        observer.next(value);
         console.log('got status: ' + value.glucose.accessible.Q);
       });
       return () => {
@@ -43,12 +43,12 @@ export class PwdService {
       };
     })
     return observable.pipe(
-      tap(status => this.log(`got t1d status with glucose ${status}`))
+      tap(status => this.log(`got t1d status with glucose ${status.glucose.accessible.Q}`))
     );
   }
 
   /** Log a PumpService message with the MessageService */
   private log(message: string) {
-    this.messageService.add('PumpService: ' + message);
+    this.messageService.add('PwdService: ' + message);
   }
 }

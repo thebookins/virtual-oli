@@ -9,7 +9,7 @@
         Glucose
       </mat-panel-title>
       <mat-panel-description>
-        {{ status }} mmol/L
+        {{ status.glucose.accessible.Q | number:'1.2-2' }} mmol/L with {{ status.glucose.gut.meals.length }} meals
       </mat-panel-description>
     </mat-expansion-panel-header>
     <p>Extra information about the glucose subsystem available here.</p>
@@ -21,7 +21,7 @@
         Insulin
       </mat-panel-title>
       <mat-panel-description>
-        3.7 U
+        {{ status.insulin.compartments[0].S | number:'1.2-2' }} / {{ status.insulin.compartments[1].S | number:'1.2-2' }} U
       </mat-panel-description>
     </mat-expansion-panel-header>
     <p>Extra information about the insulin subsystem available here.</p>

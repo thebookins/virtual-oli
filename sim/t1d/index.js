@@ -1,7 +1,7 @@
 const PWD = require('marjorie').PWD;
 const events = require('events');
 
-module.exports = (state) => {
+module.exports = (state = undefined) => {
  const model = PWD(1, state);
  const eventEmitter = new events.EventEmitter();
 
@@ -26,12 +26,12 @@ module.exports = (state) => {
     // could be a bit of a convoluted architecture
     // not sure
     attachPump: (pump) => {
-      pump.deliver = (insulin) => {
+      pump.receiver = (insulin) => {
         insulinPending_mU += insulin;
       };
     },
     removePump: (pump) => {
-      pump.deliver = null;
+      pump.receiver = null;
     },
     get glucose() {
       return model.glucose;

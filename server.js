@@ -57,7 +57,7 @@ function init(db) {
   });
 
   const pumpNsp = io.of('/pump');
-  const t1dNsp = io.of('/t1d');
+  const t1dNsp = io.of('/api/t1d/status');
 
   open.then(function(conn) {
     var ok = conn.createChannel();

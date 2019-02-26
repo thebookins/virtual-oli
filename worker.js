@@ -41,7 +41,7 @@ Promise.all([connectToDB(), connectToAMQP()])
 async function init(db, ch) {
   // load t1d
   const t1d = await db.collection('t1d').findOne({})
-    .then(state => T1d(state));
+    .then(state => T1d(state || undefined));
 
   t1d.on('status', state => {
     console.log(`received event: ${JSON.stringify(state)}`)
@@ -76,15 +76,18 @@ async function init(db, ch) {
 
     const command = JSON.parse(msg.content);
 
-    console.log(`received command to ${command.type}`);
+    console.log(`******* received command to ${command.type} *********`);
 
     switch(command.type) {
       case 'update':
+        console.log('***** we are updating ******')
         t1d.step();
         pump.step();
+        break;
       case 'eat':
+        console.log('***** we are eating ******')
         // TODO: use the real carbs
-        t1d.eat( { carbs: 100 } );
+        t1d.eat( { carbs: 99 } );
         break;
       case 'bolus':
         pump.bolus(command.dose);
