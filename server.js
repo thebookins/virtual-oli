@@ -56,8 +56,9 @@ function init(db) {
     socket.on('disconnect', () => console.log('Client disconnected'));
   });
 
-  const pumpNsp = io.of('/pump');
   const t1dNsp = io.of('/api/t1d/status');
+  const pumpNsp = io.of('/pump');
+  const cgmNsp = io.of('/cgm');
 
   open.then(function(conn) {
     var ok = conn.createChannel();
@@ -86,6 +87,15 @@ function init(db) {
         }
       });
 
+      ch.assertQueue('cgm');
+      ch.consume('cgm', function(msg) {
+        if (msg !== null) {
+          console.log(msg.content.toString());
+          const glucose = JSON.parse(msg.content);
+          cgmNsp.emit('glucose', glucose);
+          ch.ack(msg);
+        }
+      });
     });
     return ok;
   }).then(null, console.warn);
@@ -96,6 +106,7 @@ function init(db) {
   });
 
   app.post("/api/meals", function(req, res) {
+    console.log("posting to /api/meals")
     var newMeal = req.body;
 
     if (!req.body.carbs) {
@@ -121,6 +132,18 @@ function init(db) {
     });
   });
 
+  // CGM endpoints
+  // app.get('/api/cgm', cgmAPI.latest);\
+  // TODO: change this API name (make it part of CGM)
+  app.get('/api/glucose', function(req, res) {
+    db.collection('cgm').find({}).toArray(function(err, docs) {
+      if (err) {
+        console.log('Failed to get glucose history');
+      } else {
+        res.status(200).json(docs);
+      }
+    });
+  });
   //
   // // pump endpoints
   // app.get('/api/pump', pumpAPI.history);

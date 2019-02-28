@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { GlucoseService } from '../glucose.service';
 import { Glucose } from '../glucose';
@@ -8,7 +8,7 @@ import { Glucose } from '../glucose';
   templateUrl: './glucose-chart.component.html',
   styleUrls: ['./glucose-chart.component.css']
 })
-export class GlucoseChartComponent implements OnInit {
+export class GlucoseChartComponent implements OnInit, OnDestroy {
 
   glucose:Glucose[];
   glucoseBaseTime:number;
@@ -30,7 +30,7 @@ export class GlucoseChartComponent implements OnInit {
         position: 'bottom',
         ticks: {
           min: -3,
-          max: +3,
+          max: 0,
           stepSize: 1
         },
       }],
@@ -59,19 +59,12 @@ export class GlucoseChartComponent implements OnInit {
   // NOTE: this isn't working cos I've changed the gluose API to return only one value
   getGlucose(): void {
     const now = Date.now();
-    console.log("date is " + now);
     this.glucoseService.getGlucose()
     .subscribe(glucose => {
       this.glucose = glucose;
       this.datasets = [
         {
-          data: this.glucose.map(entry => ({x: (entry.readDate.valueOf() - now) / 60 / 60000, y: entry.glucose})),
-          fill: false,
-          pointRadius: 2,
-          showLine: false
-        },
-        {
-          data: Array.apply(null, Array(36)).map((x, i) => ({x: 3 * i/36, y: 6 + 1 * Math.sin(0.2 * i)})),
+          data: glucose.map((g, i) => ({x: (g.readDate.getTime() - now)/1000/60/60, y: g.glucose})),
           fill: false,
           pointRadius: 2,
           showLine: false

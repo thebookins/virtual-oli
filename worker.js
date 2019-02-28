@@ -11,6 +11,7 @@ const AMQPClient = require('amqplib');
 // TODO: roll this interface into marjorie?
 const T1d = require('./sim/t1d');
 const Pump = require('marjorie').Pump;
+const CGM = require('marjorie').CGM;
 
 const connectToDB = () => {
   return MongoClient.connect(process.env.MONGODB_URI, { useNewUrlParser: true })
@@ -69,7 +70,17 @@ async function init(db, ch) {
     ch.sendToQueue('pump', new Buffer(JSON.stringify(event)));
   });
 
+  const cgm = CGM();
+  cgm.on('glucose', event => {
+    console.log(`received glucose event: ${JSON.stringify(event)}`)
+    const readDate = new Date();
+    db.collection('cgms').updateOne({ 'id': 'ABCDEF' }, {$set: { readDate, 'glucose': event }}, {upsert: true});
+    db.collection('cgm').insertOne({ readDate, glucose: event });
+    ch.sendToQueue('cgm', new Buffer(JSON.stringify({ readDate, 'glucose': event })));
+  });
+
   t1d.attachPump(pump);
+  t1d.attachCGM(cgm);
 
   ch.consume('work', msg => {
     ch.ack(msg);
@@ -83,6 +94,7 @@ async function init(db, ch) {
         console.log('***** we are updating ******')
         t1d.step();
         pump.step();
+        cgm.step();
         break;
       case 'eat':
         console.log('***** we are eating ******')

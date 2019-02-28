@@ -5,6 +5,10 @@ module.exports = (state = undefined) => {
  const model = PWD(1, state);
  const eventEmitter = new events.EventEmitter();
 
+ // NOTE: need to rethink this setup: insulinPending_mU is not preserved on tear-down/rebuild
+ // we could keep a ref to the pump and ask for it when step is called
+ // then the pump is responsible for saving that state
+ // or i guess we could save the state here
  let insulinPending_mU = 0;
  let cgm = null;
 

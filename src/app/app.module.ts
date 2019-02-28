@@ -25,6 +25,7 @@ import { PumpComponent } from './pump/pump.component';
 
 import { MessagesComponent } from './messages/messages.component';
 import { HistoryComponent } from './pump/history/history.component';
+import { CgmComponent } from './cgm/cgm.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { HistoryComponent } from './pump/history/history.component';
     PumpComponent,
     PwdComponent,
     MealDialogComponent,
-    HistoryComponent
+    HistoryComponent,
+    CgmComponent
   ],
   entryComponents: [
     MealDialogComponent
