@@ -79,8 +79,32 @@ async function init(db, ch) {
     ch.sendToQueue('cgm', new Buffer(JSON.stringify({ readDate, 'glucose': event })));
   });
 
+  // TODO: add a status event for cgm and save the battery and clock
+  // for reanimation
+
   t1d.attachPump(pump);
   t1d.attachCGM(cgm);
+
+  // TODO: have a pump queue, t1d queue and cgm queue with
+  // the calling code within
+
+  // SOMETHING LIKE THIS:
+  ch.consume('pump', msg => {
+    ch.ack(msg);
+    const { action, args } = JSON.parse(msg.content);
+
+    const state = await db.collection('pump').findOne({})
+      .then(state => {
+        pump(state, action, args);
+        // TODO: reconstitute t1d and
+        // let it receive, something like
+//        pump(state, action, args)(t1d.bolus);
+      });
+
+    db.collection('pump').updateOne({}, { $set: state }, {upsert: true});
+    // TODO: make this a 'server' queue?
+    ch.sendToQueue('pump', new Buffer(JSON.stringify(event)));
+  });
 
   ch.consume('work', msg => {
     ch.ack(msg);

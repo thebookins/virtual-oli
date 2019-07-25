@@ -21,9 +21,13 @@
         Insulin
       </mat-panel-title>
       <mat-panel-description>
-        {{ status.insulin.compartments[0].S | number:'1.2-2' }} / {{ status.insulin.compartments[1].S | number:'1.2-2' }} U
+        {{ status.insulin.compartments[0].S | number:'1.0-0' }} /
+        {{ status.insulin.compartments[1].S | number:'1.0-0' }} /
+        {{ status.insulin.I | number:'1.0-0' }} mU
       </mat-panel-description>
     </mat-expansion-panel-header>
-    <p>Extra information about the insulin subsystem available here.</p>
+    x: {{ status.insulin.action.x[0] | number:'1.5-5' }} /
+    {{ status.insulin.action.x[1] | number:'1.5-5' }} /
+    {{ status.insulin.action.x[2] | number:'1.5-5' }}
   </mat-expansion-panel>
 </mat-accordion>

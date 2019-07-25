@@ -21,7 +21,24 @@ export class PwdComponent implements OnInit {
   fat: number;
 
   // reservoir: Number = null;
-  status: Status = null;
+  // status: Status = null;
+  status: Status = {
+    glucose: {
+     gut: {
+       meals: [{ g: 30, t: 5 }]
+     },
+     accessible: {
+       Q: 100
+     }
+   },
+   insulin: {
+     I: 23,
+     compartments: [{ S: 5.6 }, { S: 5.7 }],
+     action: {
+       x: [5,6,7]
+     }
+   }
+  };
 
   private sub: any;
 
@@ -40,7 +57,7 @@ export class PwdComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.sub = this.pwdService.status.subscribe(value => this.status = value);
+    // this.sub = this.pwdService.status.subscribe(value => this.status = value);
   }
 
   ngOnDestroy() {

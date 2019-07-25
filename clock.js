@@ -1,7 +1,7 @@
 // TODO: add logic for dropped update (i.e. during dyno restart)
 var cron = require('node-cron');
 
-var q = 'work';
+// var q = 'work';
 var url = process.env.CLOUDAMQP_URL || "amqp://localhost";
 var open = require('amqplib').connect(url);
 
@@ -23,7 +23,7 @@ cron.schedule('* * * * *', () => {
     args: [Date.now().toString()]
   }
 
-  ch.sendToQueue(q, new Buffer(JSON.stringify(command)));
+  ch.sendToQueue('t1d', new Buffer(JSON.stringify(command)));
 });
 
 // var q = 'tasks';

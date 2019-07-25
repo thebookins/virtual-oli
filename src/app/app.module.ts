@@ -3,6 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { ChartsModule } from 'ng2-charts';
+import { RouterModule } from '@angular/router';
 
 import { MatButtonModule } from '@angular/material/button'
 import { MatTabsModule } from '@angular/material/tabs';
@@ -12,6 +13,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatListModule } from '@angular/material/list';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 
 import { AppComponent } from './app.component';
@@ -26,6 +30,10 @@ import { PumpComponent } from './pump/pump.component';
 import { MessagesComponent } from './messages/messages.component';
 import { HistoryComponent } from './pump/history/history.component';
 import { CgmComponent } from './cgm/cgm.component';
+import { AppRoutingModule } from './/app-routing.module';
+import { PeopleComponent } from './people/people.component';
+import { PersonDetailComponent } from './person-detail/person-detail.component';
+import { PeopleSummaryComponent } from './people-summary/people-summary.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +46,10 @@ import { CgmComponent } from './cgm/cgm.component';
     PwdComponent,
     MealDialogComponent,
     HistoryComponent,
-    CgmComponent
+    CgmComponent,
+    PeopleComponent,
+    PersonDetailComponent,
+    PeopleSummaryComponent
   ],
   entryComponents: [
     MealDialogComponent
@@ -55,7 +66,12 @@ import { CgmComponent } from './cgm/cgm.component';
     MatDialogModule,
     MatFormFieldModule,
     FormsModule,
-    MatInputModule
+    MatInputModule,
+    MatToolbarModule,
+    MatListModule,
+    MatSidenavModule,
+    RouterModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

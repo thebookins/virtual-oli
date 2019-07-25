@@ -17,7 +17,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class CgmService {
-  private socket;
+  private socket = io('/cgm');
 
   constructor(
     private http: HttpClient,
@@ -27,11 +27,11 @@ export class CgmService {
   get glucose(): Observable<Glucose> {
     let observable = new Observable<Glucose>(observer => {
       // TODO: we probably don't need to connect to the socket again each time
-      this.socket = io('/cgm');
-      this.http.get<Glucose>('/api/cgm')
-        .subscribe(value => {
-          observer.next(value);
-        });
+      // this.socket = io('/cgm');
+      // this.http.get<Glucose>('/api/cgm')
+      //   .subscribe(value => {
+      //     observer.next(value);
+      //   });
       this.socket.on('glucose', (value) => {
         observer.next(value);
         console.log('got glucose: ' + value.glucose);
@@ -43,6 +43,11 @@ export class CgmService {
     return observable.pipe(
       tap(value => this.log(`got cgm glucose of ${value.glucose}`))
     );
+  }
+
+  // or maybe get history(): Observable<Glucose[]> {
+  getHistory(): Observable<Glucose[]> {
+    return this.http.get<Glucose[]>('/api/cgm')
   }
 
   /** Log a PumpService message with the MessageService */

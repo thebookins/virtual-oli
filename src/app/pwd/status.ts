@@ -8,6 +8,7 @@ export class Status {
     }
   };
   insulin: {
+    I: number,
     compartments: { S: number }[],
     action: {
       x: number[]

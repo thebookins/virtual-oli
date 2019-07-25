@@ -9,7 +9,13 @@ import { Glucose } from './glucose';
   styleUrls: ['./cgm.component.css']
 })
 export class CgmComponent implements OnInit {
-  glucose: Glucose = null;
+  // glucose: Glucose = null;
+  // maybe save three hours of glucose here rather than a single value
+  glucose: Glucose = {
+    readDate: new Date(),
+    glucose: 100
+  };
+
   private sub: any;
 
   constructor(private cgmService: CgmService) { }

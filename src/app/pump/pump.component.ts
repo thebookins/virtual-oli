@@ -9,8 +9,12 @@ import { PumpService } from './pump.service';
   styleUrls: ['./pump.component.css']
 })
 export class PumpComponent implements OnInit {
-  status: Status = null;
-  reservoir: Number = null;
+  // status: Status = null;
+  status: Status = {
+    suspensed: false,
+    bolusing: false,
+    reservoir: 300
+  };
 
   private sub: any;
 

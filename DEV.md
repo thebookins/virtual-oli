@@ -8,7 +8,7 @@ Things we might want to do with the patient.
  - inject(bolus): for regular needle injections; bolus will contain information about the drug (e.g. lantus, novorapid, glucagon etc.)
  - addPump(pump): When a pump is added, step() will query the pump for infusion rate.
  - removePump()
- - addCGM(cgm): When a cgm is added, step() will set the intersitial glucose conc on the cgm object.
+ - addCGM(cgm): When a cgm is added, step() will set the interstitial glucose conc on the cgm object.
  - removeCGM()
 
 Things that should be under the hood at some level:
