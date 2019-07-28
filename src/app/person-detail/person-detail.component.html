@@ -1,11 +1,38 @@
-<div *ngIf="person">
+<!-- <div>
+  <label>name:
+    <input [(ngModel)]="person.name" placeholder="name"/>
+  </label>
+</div> -->
 
-  <h2>{{person.name | uppercase}} Details</h2>
-  <div><span>id: </span>{{person.id}}</div>
-  <div>
-    <label>name:
-      <input [(ngModel)]="person.name" placeholder="name"/>
-    </label>
+<mat-card class="example-card">
+<mat-card-header>
+  <div mat-card-avatar>
+    <mat-icon>person</mat-icon>
   </div>
-
-</div>
+  <mat-card-title>{{person.name}}</mat-card-title>
+  <mat-card-subtitle>{{person.id}}</mat-card-subtitle>
+</mat-card-header>
+<!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
+<mat-card-content>
+  <p>
+    Placeholder for person content. DOB: {{person.dob | date: 'shortDate'}}
+  </p>
+</mat-card-content>
+<mat-card-actions>
+  <button mat-button>Eat 20g</button>
+  <!-- <button mat-button>SHARE</button> -->
+</mat-card-actions>
+<app-meal-list [person_id]="person.id"></app-meal-list>
+<mat-accordion>
+  <mat-expansion-panel *ngFor="let device of devices">
+    <mat-expansion-panel-header>
+      <mat-panel-title>{{device.name}}</mat-panel-title>
+      <mat-panel-description>Connected</mat-panel-description>
+    </mat-expansion-panel-header>
+    <app-pump></app-pump>
+    <mat-action-row>
+      <button mat-button>Disconnect</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+</mat-accordion>
+</mat-card>

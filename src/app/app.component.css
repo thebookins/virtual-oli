@@ -1,3 +1,7 @@
 .tabs {
   max-width: 800px;
 }
+
+.mat-sidenav {
+  min-width: 200px
+}

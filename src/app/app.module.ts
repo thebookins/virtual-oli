@@ -4,6 +4,10 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { ChartsModule } from 'ng2-charts';
 import { RouterModule } from '@angular/router';
+import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { InMemoryDataService }  from './in-memory-data.service';
+
+
 
 import { MatButtonModule } from '@angular/material/button'
 import { MatTabsModule } from '@angular/material/tabs';
@@ -16,6 +20,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 
 
 import { AppComponent } from './app.component';
@@ -71,7 +77,15 @@ import { PeopleSummaryComponent } from './people-summary/people-summary.componen
     MatListModule,
     MatSidenavModule,
     RouterModule,
-    AppRoutingModule
+    AppRoutingModule,
+    MatCardModule,
+    MatIconModule,
+    // The HttpClientInMemoryWebApiModule module intercepts HTTP requests
+    // and returns simulated server responses.
+    // Remove it when a real server is ready to receive requests.
+    HttpClientInMemoryWebApiModule.forRoot(
+      InMemoryDataService, { dataEncapsulation: false }
+    )
   ],
   providers: [],
   bootstrap: [AppComponent]

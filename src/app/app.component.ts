@@ -7,5 +7,4 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Virtual Oli';
-  // people = ['John', 'Ringo', 'Paul', 'George'];
 }

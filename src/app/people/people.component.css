@@ -1,0 +1,7 @@
+.is-active {
+    font-weight: bold;
+}
+
+.mat-nav-list {
+  max-width: 400px
+}

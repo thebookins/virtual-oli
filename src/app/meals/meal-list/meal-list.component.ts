@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Meal } from '../meal';
 import { MealService } from '../meal.service';
 
@@ -8,6 +8,8 @@ import { MealService } from '../meal.service';
   styleUrls: ['./meal-list.component.css']
 })
 export class MealListComponent implements OnInit {
+
+  @Input() person_id: number;
 
   meals: Meal[];
 
@@ -22,12 +24,11 @@ export class MealListComponent implements OnInit {
   }
 
   getMeals(): void {
-    this.mealService.getMeals()
+    this.mealService.getMealsFor(this.person_id)
         .subscribe(meals => this.meals = meals);
   }
 
   ngOnInit() {
     this.getMeals();
   }
-
 }

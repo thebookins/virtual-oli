@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MealsService } from './meals.service';
+import { InMemoryDataService } from './in-memory-data.service';
 
-describe('MealsService', () => {
+describe('InMemoryDataService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: MealsService = TestBed.get(MealsService);
+    const service: InMemoryDataService = TestBed.get(InMemoryDataService);
     expect(service).toBeTruthy();
   });
 });
