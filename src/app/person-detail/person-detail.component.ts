@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
 import { Person } from '../person';
-import { Device } from '../device';
 import { PersonService }  from '../person.service';
 
 @Component({
@@ -14,8 +13,6 @@ import { PersonService }  from '../person.service';
 export class PersonDetailComponent implements OnInit {
 
   @Input() person: Person;
-
-  @Input() devices: Device[];
 
   constructor(
     private route: ActivatedRoute,
@@ -32,9 +29,6 @@ export class PersonDetailComponent implements OnInit {
       const id = +params.id;
       this.personService.getPerson(id)
         .subscribe(person => this.person = person);
-      this.personService.getDevicesFor(id)
-        .subscribe(devices => this.devices = devices);
-
     });
   }
 }

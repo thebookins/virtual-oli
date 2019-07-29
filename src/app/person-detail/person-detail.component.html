@@ -15,7 +15,7 @@
 <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
 <mat-card-content>
   <p>
-    Placeholder for person content. DOB: {{person.dob | date: 'shortDate'}}
+    Placeholder for person content. DOB: {{person.dob | date: 'shortDate'}}. Glucose: {{person.glucose}}.
   </p>
 </mat-card-content>
 <mat-card-actions>
@@ -23,7 +23,10 @@
   <!-- <button mat-button>SHARE</button> -->
 </mat-card-actions>
 <app-meal-list [person_id]="person.id"></app-meal-list>
-<mat-accordion>
+<app-pump-list [person_id]="person.id"></app-pump-list>
+
+
+<!-- <mat-accordion>
   <mat-expansion-panel *ngFor="let device of devices">
     <mat-expansion-panel-header>
       <mat-panel-title>{{device.name}}</mat-panel-title>
@@ -34,5 +37,5 @@
       <button mat-button>Disconnect</button>
     </mat-action-row>
   </mat-expansion-panel>
-</mat-accordion>
+</mat-accordion> -->
 </mat-card>

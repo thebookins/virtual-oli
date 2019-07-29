@@ -1,0 +1,10 @@
+<mat-expansion-panel *ngFor="let pump of pumps">
+  <mat-expansion-panel-header>
+    <mat-panel-title>{{pump.name}}</mat-panel-title>
+    <mat-panel-description>Connected</mat-panel-description>
+  </mat-expansion-panel-header>
+  <!-- <app-pump></app-pump> -->
+  <mat-action-row>
+    <button mat-button>Disconnect</button>
+  </mat-action-row>
+</mat-expansion-panel>

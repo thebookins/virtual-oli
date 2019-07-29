@@ -8,31 +8,55 @@ import { Injectable } from '@angular/core';
 export class InMemoryDataService implements InMemoryDbService {
   createDb() {
     const people = [
-      { id: 11, name: 'John', dob: new Date()  },
-      { id: 12, name: 'Ringo', dob: new Date()  },
-      { id: 13, name: 'George', dob: new Date() },
-      { id: 14, name: 'Paul', dob: new Date() },
-      { id: 15, name: 'Bono', dob: new Date() },
-      { id: 16, name: 'Elton', dob: new Date() },
-      { id: 17, name: 'Edge', dob: new Date() },
-      { id: 18, name: 'Nick', dob: new Date() },
-      { id: 19, name: 'Bob', dob: new Date() },
-      { id: 20, name: 'Leonard', dob: new Date() }
+      { id: 11, name: 'John', dob: new Date(), glucose: 6  },
+      { id: 12, name: 'Ringo', dob: new Date(), glucose: 6  },
+      { id: 13, name: 'George', dob: new Date(), glucose: 6 },
+      { id: 14, name: 'Paul', dob: new Date(), glucose: 6 },
+      { id: 15, name: 'Bono', dob: new Date(), glucose: 6 },
+      { id: 16, name: 'Elton', dob: new Date(), glucose: 6 },
+      { id: 17, name: 'Edge', dob: new Date(), glucose: 6 },
+      { id: 18, name: 'Nick', dob: new Date(), glucose: 6 },
+      { id: 19, name: 'Bob', dob: new Date(), glucose: 6 },
+      { id: 20, name: 'Leonard', dob: new Date(), glucose: 6 }
     ];
 
-    // TODO: it might be best to have a pumps collection and a cmgs collection
-    // rather than just a devices collection
-    const devices = [
-      { id: 11, name: 'Medtronic 723', owner_id: 14 },
-      { id: 12, name: 'Dexcom G5', owner_id: 14 }
+    // this simulates a simple clock process
+    setInterval(() => {
+      people.forEach(person => {
+        person.glucose += 1;
+      });
+    }, 60000);
+
+    const pumps = [
+      { id: 11, name: 'Medtronic 723', person_id: 14 },
+    ];
+
+    const pumpEvents = [];
+
+    const cgms = [
+      { id: 11, name: 'Dexcom G5', owner_id: 14 }
+    ];
+
+    const cgmEvents = [
+      { id: 11, date: new Date(), glucose: 6, cgm_id: 11 }
     ];
 
     const meals = [
-      { id: 11, date: 0, carbs: 30, person_id: 14 },
-      { id: 12, date: 0, carbs: 23, person_id: 14 }      
+      { id: 11, date: new Date(0), carbs: 30, person_id: 14 },
+      { id: 12, date: new Date(10000), carbs: 23, person_id: 14 }
     ];
 
-    return {people, devices, meals};
+    return {
+      // people
+      people,
+      meals,
+      // pumps
+      pumps,
+      'pump-events': pumpEvents,
+      // cgms
+      cgms,
+      'cgm-events': cgmEvents
+    };
   }
 
   // Overrides the genId method to ensure that a hero always has an id.

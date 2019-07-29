@@ -4,7 +4,6 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { Person } from './person';
-import { Device } from './device';
 import { MessageService } from './message.service';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -38,14 +37,6 @@ export class PersonService {
     return this.http.get<Person>(url).pipe(
       tap(_ => this.log(`fetched person id=${id}`)),
       catchError(this.handleError<Person>(`getPerson id=${id}`))
-    );
-  }
-
-  getDevicesFor(id: number): Observable<Device[]> {
-    const url = `${this.devicesUrl}?owner_id=${id}`;
-    return this.http.get<Device[]>(url).pipe(
-      tap(devices => this.log(`fetched ${devices.length} devices for owner id=${id}`)),
-      catchError(this.handleError<Device[]>(`getDevicesFor id=${id}`, []))
     );
   }
 

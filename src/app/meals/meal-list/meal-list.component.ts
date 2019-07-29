@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { Meal } from '../meal';
 import { MealService } from '../meal.service';
 
@@ -23,12 +23,11 @@ export class MealListComponent implements OnInit {
       });
   }
 
-  getMeals(): void {
+  ngOnChanges() {
+    this.meals = [];
     this.mealService.getMealsFor(this.person_id)
         .subscribe(meals => this.meals = meals);
   }
 
-  ngOnInit() {
-    this.getMeals();
-  }
+  ngOnInit() {}
 }
