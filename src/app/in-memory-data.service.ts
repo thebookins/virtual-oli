@@ -19,18 +19,13 @@ export class InMemoryDataService implements InMemoryDbService {
       { id: 20, name: 'Leonard', dob: new Date(), glucose: 6 }
     ];
 
-    // this simulates a simple clock process
-    setInterval(() => {
-      people.forEach(person => {
-        person.glucose += 1;
-      });
-    }, 60000);
-
     const pumps = [
-      { id: 11, name: 'Medtronic 723', person_id: 14 },
+      { id: 11, person_id: 14, name: 'Medtronic 723', reservoir: 300 }
     ];
 
-    const pumpEvents = [];
+    const pumpEvents = [
+      { id: 11, pump_id: 11, date: new Date(), type: 'Bolus', insulin: 7.3}
+    ];
 
     const cgms = [
       { id: 11, name: 'Dexcom G5', owner_id: 14 }
@@ -44,6 +39,28 @@ export class InMemoryDataService implements InMemoryDbService {
       { id: 11, date: new Date(0), carbs: 30, person_id: 14 },
       { id: 12, date: new Date(10000), carbs: 23, person_id: 14 }
     ];
+
+    // this simulates a simple clock process (each minute)
+    let lastUpdate = new Date(0);
+    setInterval(() => {
+      people.forEach(person => {
+        person.glucose += 1;
+      });
+      const now = new Date();
+      pumpEvents.forEach(event => {
+        console.log('in here1');
+        if (event.date > lastUpdate) {
+          console.log('in here');
+          pumps.forEach(pump => {
+            if (pump.id === event.pump_id) {
+              pump.reservoir -= event.insulin;
+            }
+          });
+        }
+      });
+      lastUpdate = now;
+    }, 60000);
+
 
     return {
       // people
