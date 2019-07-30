@@ -20,7 +20,7 @@ export class PersonDetailComponent implements OnInit {
     private location: Location
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.getPerson();
   }
 

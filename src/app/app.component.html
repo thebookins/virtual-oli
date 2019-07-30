@@ -1,13 +1,7 @@
 <mat-toolbar>
   <span>{{title}}</span>
 </mat-toolbar>
-<!-- TODO: clean up this direct style: here only as a hack to make the container take up most of the viewport -->
-<mat-sidenav-container style="height: 88vh;">
-  <mat-sidenav mode="side" opened>
-    <app-people></app-people>
-  </mat-sidenav>
-  <mat-sidenav-content>
-    <router-outlet></router-outlet>
+<router-outlet></router-outlet>
     <!-- <mat-tab-group class="tabs">
       <mat-tab label="PWD">
         <app-pwd></app-pwd>
@@ -22,6 +16,4 @@
     </mat-tab-group>
 
     <app-messages></app-messages> -->
-  </mat-sidenav-content>
-</mat-sidenav-container>
 <app-messages></app-messages>

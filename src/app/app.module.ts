@@ -20,8 +20,8 @@ import { FormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
+// import { MatCardModule } from '@angular/material/card';
+// import { MatIconModule } from '@angular/material/icon';
 
 
 import { AppComponent } from './app.component';
@@ -30,6 +30,7 @@ import { PwdComponent, MealDialogComponent } from './pwd/pwd.component';
 // import { GlucoseDetailsComponent } from './glucose/glucose-details/glucose-details.component';
 // import { GlucoseChartComponent } from './glucose/glucose-chart/glucose-chart.component';
 //import { MealListComponent } from './meals/meal-list/meal-list.component';
+import { PeopleModule } from './people/people.module';
 import { MealsModule } from './meals/meals.module';
 import { PumpsModule } from './pumps/pumps.module';
 
@@ -39,9 +40,9 @@ import { MessagesComponent } from './messages/messages.component';
 // import { HistoryComponent } from './pump/history/history.component';
 // import { CgmComponent } from './cgm/cgm.component';
 import { AppRoutingModule } from './/app-routing.module';
-import { PeopleComponent } from './people/people.component';
-import { PersonDetailComponent } from './person-detail/person-detail.component';
-import { PeopleSummaryComponent } from './people-summary/people-summary.component';
+// import { PeopleComponent } from './people/people.component';
+// import { PersonDetailComponent } from './person-detail/person-detail.component';
+// import { PeopleSummaryComponent } from './people-summary/people-summary.component';
 
 @NgModule({
   declarations: [
@@ -55,9 +56,9 @@ import { PeopleSummaryComponent } from './people-summary/people-summary.componen
     MealDialogComponent,
     // HistoryComponent,
     // CgmComponent,
-    PeopleComponent,
-    PersonDetailComponent,
-    PeopleSummaryComponent
+    // PeopleComponent,
+    // PersonDetailComponent,
+    // PeopleSummaryComponent
   ],
   entryComponents: [
     MealDialogComponent
@@ -80,8 +81,9 @@ import { PeopleSummaryComponent } from './people-summary/people-summary.componen
     MatSidenavModule,
     RouterModule,
     AppRoutingModule,
-    MatCardModule,
-    MatIconModule,
+    // MatCardModule,
+    // MatIconModule,
+    PeopleModule,
     MealsModule,
     PumpsModule,
     // The HttpClientInMemoryWebApiModule module intercepts HTTP requests

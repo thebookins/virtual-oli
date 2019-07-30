@@ -4,11 +4,11 @@ import { Person } from '../person';
 import { PersonService } from '../person.service';
 
 @Component({
-  selector: 'app-people',
-  templateUrl: './people.component.html',
-  styleUrls: ['./people.component.css']
+  selector: 'app-person-list',
+  templateUrl: './person-list.component.html',
+  styleUrls: ['./person-list.component.css']
 })
-export class PeopleComponent implements OnInit {
+export class PersonListComponent implements OnInit {
 
   people: Person[];
 
@@ -31,5 +31,4 @@ export class PeopleComponent implements OnInit {
   ngOnInit() {
     this.getPeople();
   }
-
 }
