@@ -51,6 +51,8 @@ export class InMemoryDataService implements InMemoryDbService {
         console.log('in here1');
         if (event.date > lastUpdate) {
           console.log('in here');
+//          const pump = this.applyQuery(pumps, {pump.id: event.pump_id}): any[]
+
           pumps.forEach(pump => {
             if (pump.id === event.pump_id) {
               pump.reservoir -= event.insulin;

@@ -26,8 +26,8 @@ export class PersonDetailComponent implements OnInit {
 
   getPerson(): void {
     this.route.params.subscribe(params => {
-      const id = +params.id;
-      this.personService.getPerson(id)
+      // const id = +params.id; // don't need this if id is a string
+      this.personService.getPerson(params.id)
         .subscribe(person => this.person = person);
     });
   }

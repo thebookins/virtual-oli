@@ -32,8 +32,9 @@ export class PersonService {
       );
   }
 
-  getPerson(id: number): Observable<Person> {
+  getPerson(id: string): Observable<Person> {
     const url = `${this.peopleUrl}/${id}`;
+    console.log(`url: ${url}`);
     return this.http.get<Person>(url).pipe(
       tap(_ => this.log(`fetched person id=${id}`)),
       catchError(this.handleError<Person>(`getPerson id=${id}`))
@@ -43,7 +44,7 @@ export class PersonService {
   /** POST: add a new person to the server */
   addPerson (person: Person): Observable<Person> {
     return this.http.post<Person>(this.peopleUrl, person, this.httpOptions).pipe(
-      tap((newPerson: Person) => this.log(`added person w/ id=${newPerson.id}`)),
+      tap((newPerson: Person) => this.log(`added person w/ id=${newPerson._id}`)),
       catchError(this.handleError<Person>('addPerson'))
     );
   }
