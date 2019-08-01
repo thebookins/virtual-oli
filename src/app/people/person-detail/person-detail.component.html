@@ -10,12 +10,12 @@
     <mat-icon>person</mat-icon>
   </div>
   <mat-card-title>{{person.name}}</mat-card-title>
-  <mat-card-subtitle>{{person.id}}</mat-card-subtitle>
+  <mat-card-subtitle>{{person._id}}</mat-card-subtitle>
 </mat-card-header>
 <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
 <mat-card-content>
   <p>
-    Placeholder for person content. DOB: {{person.dob | date: 'shortDate'}}. Glucose: {{person.glucose}}.
+    Placeholder for person content. DOB: {{person.dob | date: 'shortDate'}}. Glucose: {{person.state.glucose}}.
   </p>
 </mat-card-content>
 <mat-card-actions>
@@ -23,7 +23,7 @@
   <!-- <button mat-button>SHARE</button> -->
 </mat-card-actions>
 <!-- <app-meal-list [person_id]="person.id"></app-meal-list> -->
-<app-pump-list [person_id]="person.id"></app-pump-list>
+<app-pump-list [person_id]="person._id"></app-pump-list>
 
 
 <!-- <mat-accordion>

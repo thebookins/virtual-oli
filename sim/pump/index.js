@@ -16,6 +16,7 @@ const pump = (state, action, ...args) => {
     switch(action) {
       case 'basal': return basal;
       case 'bolus': return bolus;
+      default: return () => {};
     }
   })();
 

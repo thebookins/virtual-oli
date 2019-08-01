@@ -22,8 +22,9 @@ export class PumpService {
     private http: HttpClient,
     private messageService: MessageService) { }
 
-  getPumpsFor(id: number): Observable<Pump[]> {
+  getPumpsFor(id: string): Observable<Pump[]> {
     const url = `${this.pumpsUrl}?person_id=${id}`;
+    console.log(`url: ${url}`);
     return this.http.get<Pump[]>(url).pipe(
       tap(pumps => this.log(`fetched ${pumps.length} pumps for person id=${id}`)),
       catchError(this.handleError<Pump[]>(`getPumpsFor id=${id}`, []))

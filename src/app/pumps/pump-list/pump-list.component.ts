@@ -9,7 +9,7 @@ import { PumpService } from '../pump.service';
 })
 export class PumpListComponent implements OnInit {
 
-  @Input() person_id: number;
+  @Input() person_id: string;
 
   pumps: Pump[];
 

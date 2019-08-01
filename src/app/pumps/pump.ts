@@ -1,6 +1,6 @@
 export class Pump {
-  _id?: number; // TODO: change this to string for heroku
-  person_id: number;
+  _id?: string;
+  person_id: string;
   reservoir: number;
   name: string;
 }

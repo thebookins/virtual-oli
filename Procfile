@@ -1,3 +1,3 @@
 web:    node server.js
-#worker: node worker
-#clock:  node clock
+worker: node worker.js
+clock:  node clock.js

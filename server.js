@@ -25,7 +25,7 @@ app.use(express.static(distDir));
 let db;
 
 // Connect to the database before starting the application server.
-MongoClient.connect(process.env.MONGODB_URI)
+MongoClient.connect(process.env.MONGODB_URI, { useNewUrlParser: true })
 .then(client => {
   // Save database object from the callback for reuse.
   db = client.db();
@@ -68,6 +68,30 @@ app.get("/api/people/:id", function(req, res) {
       handleError(res, err.message, "Failed to get person");
     } else {
       res.status(200).json(doc);
+    }
+  });
+});
+
+app.get("/api/pumps", function(req, res) {
+  db.collection('pumps').find({
+    person_id: new ObjectID(req.query.person_id)
+  }).toArray(function(err, docs) {
+    if (err) {
+      handleError(res, err.message, "Failed to get pumps");
+    } else {
+      res.status(200).json(docs);
+    }
+  });
+});
+
+app.get("/api/cgms", function(req, res) {
+  db.collection('cgms').find({
+    person_id: new ObjectID(req.query.person_id)
+  }).toArray(function(err, docs) {
+    if (err) {
+      handleError(res, err.message, "Failed to get cgms");
+    } else {
+      res.status(200).json(docs);
     }
   });
 });

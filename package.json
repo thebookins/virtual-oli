@@ -36,6 +36,7 @@
     "component": "^1.1.0",
     "core-js": "^2.6.1",
     "express": "^4.16.4",
+    "marjorie": "github:thebookins/marjorie#v0.2.0",
     "mongodb": "^3.1.10",
     "ng2-charts": "^1.6.0",
     "node-cron": "^2.0.3",

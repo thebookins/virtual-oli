@@ -1,29 +1,38 @@
 // TODO: add logic for dropped update (i.e. during dyno restart)
 var cron = require('node-cron');
 
+const Queue = require('bull');
+
+
 // var q = 'work';
-var url = process.env.CLOUDAMQP_URL || "amqp://localhost";
-var open = require('amqplib').connect(url);
+// var url = process.env.CLOUDAMQP_URL || "amqp://localhost";
+// var open = require('amqplib').connect(url);
+const REDIS_URL = process.env.REDIS_URL || 'redis://127.0.0.1:6379';
 
-let ch;
+const workQueue = new Queue('work', REDIS_URL);
 
-open.then(function(conn) {
-  var ok = conn.createChannel();
-  ok = ok.then(function(c) {
-    c.assertQueue(q);
-    ch = c;
-  });
-  return ok;
-}).then(null, console.warn);
 
-cron.schedule('* * * * *', () => {
+
+// let ch;
+
+// open.then(function(conn) {
+//   var ok = conn.createChannel();
+//   ok = ok.then(function(c) {
+//     c.assertQueue(q);
+//     ch = c;
+//   });
+//   return ok;
+// }).then(null, console.warn);
+
+cron.schedule('* * * * *', async () => {
   console.log('running a task every minute');
   const command = {
     type: 'update',
     args: [Date.now().toString()]
   }
+ let job = await workQueue.add(command);
 
-  ch.sendToQueue('t1d', new Buffer(JSON.stringify(command)));
+//  ch.sendToQueue('t1d', new Buffer(JSON.stringify(command)));
 });
 
 // var q = 'tasks';

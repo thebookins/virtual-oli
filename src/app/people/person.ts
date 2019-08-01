@@ -1,6 +1,8 @@
+import { State } from './state';
+
 export class Person {
   _id?: string;
   name: string;
   dob: Date;
-  glucose: number;
+  state: State;
 }
