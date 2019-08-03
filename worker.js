@@ -25,48 +25,50 @@ let workers = process.env.WEB_CONCURRENCY || 2;
 // to be much lower.
 let maxJobsPerWorker = 50;
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+// function sleep(ms) {
+//   return new Promise(resolve => setTimeout(resolve, ms));
+// }
 
 function start() {
   connectToDB().then(db => {
-    db.collection('cgm-events').createIndex( { "readDate": 1 }, { expireAfterSeconds: 7200 } )
+    // NOTE: this only needs be done once, and can be done on the server
+    db.collection('cgm-events').createIndex( { "readDate": 1 }, { expireAfterSeconds: 7200 } );
 
-
-    // Connect to the named work queue
-    console.log('creating new work queue');
     let workQueue = new Queue('work', REDIS_URL);
 
     workQueue.process(maxJobsPerWorker, async (job) => {
       console.log(`worker got data ${JSON.stringify(job.data)}`);
+      if (job.data.type !== 'update') return;
 
-      // db.collection('people').updateMany({}, {
-      //   $inc: { glucose: 1 },
-      //   $currentDate: { lastModified: true }
-      // });
-
-      db.collection('pumps').find().forEach(doc => {
-        const updatedState = pump(doc.state, 'basal', insulin => {
-          console.log(`insulin bolus: ${insulin}`);
-          // TODO: bolus this insulin to the correct person
-        });
+      // for each pump in the database update its state
+      // and dose its connected person with the basal insulin
+      await db.collection('pumps').find().forEach(doc => {
+        const dose = insulin => {
+          db.collection('people').findOne({_id: doc.person_id})
+          .then(person => {
+            const updatedState = t1d(person.state, 'dose', insulin * 1000);
+            db.collection('people').updateOne({_id: person._id}, {$set: {state: updatedState}});
+          });
+        };
+        const updatedState = pump(doc.state, 'basal', dose);
         db.collection('pumps').updateOne({_id: doc._id}, {$set: {state: updatedState}});
       });
 
-      db.collection('people').find().forEach(person => {
+      // for each person, update state
+      await db.collection('people').find().forEach(person => {
         const updatedState = t1d(person.state, 'step', 1)
         // const updatedGlucose = doc.glucose + 1;
         db.collection('people').updateOne({_id: person._id}, {$set: {state: updatedState}});
       });
 
-      db.collection('cgms').updateMany({}, {
+      // update the clock
+      await db.collection('cgms').updateMany({}, {
         $inc: { clock: 1 },
         $currentDate: { lastModified: true }
       });
 
-      // each five minutes...
-      db.collection('cgms').find({ clock: { $mod: [ 5, 0 ] } }).forEach(cgm => {
+      // every five minutes...
+      await db.collection('cgms').find({ clock: { $mod: [ 5, 0 ] } }).forEach(cgm => {
         // if five cgm minutes is up...
         db.collection('people').findOne({_id: cgm.person_id})
         .then(person => {
@@ -75,42 +77,7 @@ function start() {
           console.log(`glucose = ${glucose}`);
         })
       });
-
-      // // TODO: is there a better way to update a document?
-      // db.collection('people').find().forEach(person => {
-      //   console.log(`got person: ${JSON.stringify(person)}`);
-      //   person.glucose = +person.glucose + 1;
-      //   db.collection('people').updateOne({ _id: person._id }, { $set: person }, {upsert: true});
-      // });
-        // // TODO: we are just updating here, other actions to follow
-        // .then(state => t1d(state, 'update'))
-        // .then(state => {
-        //   db.collection('t1d').updateOne({}, { $set: state }, {upsert: true});
-        //   // TODO: the server doesn't know that this is t1d state
-        //   ch.sendToQueue('server', new Buffer(JSON.stringify(state)));
-        // });
-
-
-  //     // This is an example job that just slowly reports on progress
-  //     // while doing no work. Replace this with your own job logic.
-  //     let progress = 0;
-  //
-  //     // throw an error 5% of the time
-  //     if (Math.random() < 0.05) {
-  //       throw new Error("This job failed!")
-  //     }
-  //
-  //     while (progress < 100) {
-  //       await sleep(50);
-  //       progress += 1;
-  //       job.progress(progress)
-  //     }
-  //
-  //     // A job can return values that will be stored in Redis as JSON
-  //     // This return value is unused in this demo application.
-  //     return { value: "This will be stored" };
     });
-
   });
 }
 

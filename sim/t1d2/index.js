@@ -4,13 +4,13 @@ const PWD = require('marjorie').PWD;
 const curry = (state, action, ...args) => {
   const model = PWD(1, state);
 
-  const step = (u) => {
-    model.step(u);
+  const step = () => {
+    model.step();
     return model.state;
   };
 
-  const bolus = (U) => {
-    model.bolus(U);
+  const dose = (U) => {
+    model.dose(U);
     return model.state;
   };
 
@@ -21,7 +21,7 @@ const curry = (state, action, ...args) => {
   const fn = (() => {
     switch(action) {
       case 'step': return step;
-      case 'bolus': return bolus;
+      case 'dose': return dose;
       case 'glucose': return glucose;
       default: return () => state;
     }

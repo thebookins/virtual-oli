@@ -1,9 +1,11 @@
+const basalRate = 1; // U/hr
+const dt = 1; // min
+
 const pump = (state, action, ...args) => {
+  // TODO: maybe change the name to step?
   const basal = (receiver) => {
     state.clock += 1;
-    state.reservoir -= 1;
-    receiver(1);
-    return state;
+    return bolus(dt * basalRate / 60, receiver);
   }
 
   const bolus = (units, receiver) => {

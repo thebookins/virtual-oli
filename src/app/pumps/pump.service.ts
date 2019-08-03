@@ -31,6 +31,15 @@ export class PumpService {
     );
   }
 
+  bolus(id: string, units): Observable<string> {
+    const url = `${this.pumpsUrl}/${id}`;
+    return this.http.post<string>(url, "bolus please", this.httpOptions).pipe(
+      // tap((newEvent: string) => this.log(`added person w/ id=${newPerson._id}`)),
+      catchError(this.handleError<string>('bolus'))
+    );
+  }
+
+
   /**
    * Handle Http operation that failed.
    * Let the app continue.

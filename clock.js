@@ -32,6 +32,11 @@ cron.schedule('* * * * *', async () => {
   }
  let job = await workQueue.add(command);
 
+  // TODO: maybe set up three queues and do something like this?
+  // await pumpQueue.add({'step'})
+  // await cgmQueue.add({'step'})
+  // await personQueue.add({'step'})
+
 //  ch.sendToQueue('t1d', new Buffer(JSON.stringify(command)));
 });
 
