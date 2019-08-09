@@ -12,14 +12,8 @@ const mongodb = require("mongodb");
 const MongoClient = mongodb.MongoClient;
 const ObjectID = mongodb.ObjectID;
 
-// TODO: maybe define these in worker only???
-const t1d = require('./sim/t1d2');
-const pump = require('./sim/pump');
 
-let Queue = require('bull');
-// Connect to a local redis instance locally, and the Heroku-provided URL in production
-let REDIS_URL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
-
+const Helper = require('./helper')
 
 // const socketIO = require('socket.io');
 
@@ -53,7 +47,7 @@ function init(db) {
     console.log("App now running on port", port);
   });
 
-  let workQueue = new Queue('work', REDIS_URL);
+  const helper = Helper(db);
 
   // const io = socketIO(server);
 
@@ -104,8 +98,30 @@ app.put("/api/people/:id", function(req, res) {
   // TODO: implement
 });
 
-app.post("/api/people/:id", function(req, res) {
-  // TODO: implement
+app.get("/api/people/:id/meals", async function(req, res) {
+  db.collection('meals').find({ person_id: new ObjectID(req.params.id) }).toArray(function(err, docs) {
+    if (err) {
+      console.log('Failed to get meals');
+    } else {
+      res.status(200).json(docs);
+    }
+  });
+});
+
+// TODO: should be :id/meals
+app.post("/api/people/:id", async function(req, res) {
+  var newEvent = req.body;
+  console.log(`got POST request: ${newEvent}`);
+
+  // TODO: match type to action, get amount from request
+  // if (!req.body.type) {
+  //   handleError(res, "Invalid user input", "Must provide an event type.", 400);
+  // }
+
+  // TODO: work out error handing with async/await
+  await helper.person.eat(req.params.id)(20);
+  console.log('about to reply with 201');
+  res.status(201).json({});
 });
 
 app.delete("/api/people/:id", function(req, res) {
@@ -151,35 +167,11 @@ app.post("/api/pumps/:id", async function(req, res) {
     handleError(res, "Invalid user input", "Must provide an event type.", 400);
   }
 
-  // TODO: consider farming this out to the worker
-  // that way we keep all the logic in one place
-
-  console.log(`finding pump with id ${req.params.id}`)
-  await db.collection('pumps').findOne({ _id: new ObjectID(req.params.id) })
-  .then(doc => {
-    console.log(doc);
-    const dose = insulin => {
-      db.collection('people').findOne({_id: doc.person_id})
-      .then(person => {
-        console.log(JSON.stringify(person));
-        const updatedState = t1d(person.state, 'dose', insulin * 1000);
-        db.collection('people').updateOne({_id: person._id}, {$set: {state: updatedState}});
-      });
-    };
-    const updatedState = pump(doc.state, 'bolus', 1, dose);
-    db.collection('pumps').updateOne({_id: doc._id}, {$set: {state: updatedState}});
-  });
-
-  await db.collection('pump-events').insertOne(newEvent, function(err, doc) {
-    if (err) {
-      handleError(res, err.message, "Failed to create new event.");
-    } else {
-      res.status(201).json(doc.ops[0]);
-    }
-  });
+  // TODO: work out error handing with async/await
+  await helper.pump.bolus(req.params.id)(1);
+  console.log('about to reply with 201');
+  res.status(201).json({});
 });
-
-
 
 app.get("/api/cgms", function(req, res) {
   db.collection('cgms').find({

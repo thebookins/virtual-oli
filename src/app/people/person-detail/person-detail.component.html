@@ -15,11 +15,11 @@
 <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
 <mat-card-content>
   <p>
-    Placeholder for person content. DOB: {{person.dob | date: 'shortDate'}}. Glucose: {{person.state.glucose}}.
+    Placeholder for person content. DOB: {{person.dob | date: 'shortDate'}}.
   </p>
 </mat-card-content>
 <mat-card-actions>
-  <button mat-button>Eat 20g</button>
+  <button mat-button (click)="eat(20)">Eat 20g</button>
   <!-- <button mat-button>SHARE</button> -->
 </mat-card-actions>
 <!-- <app-meal-list [person_id]="person.id"></app-meal-list> -->

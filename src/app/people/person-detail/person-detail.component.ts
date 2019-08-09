@@ -31,4 +31,12 @@ export class PersonDetailComponent implements OnInit {
         .subscribe(person => this.person = person);
     });
   }
+
+  eat(g: number) {
+    this.personService.eat(this.person._id, this.person) // NOTE: hack here: replace person
+      .subscribe(person => {
+        console.log(`got response ${person}`);
+      });
+
+  }
 }

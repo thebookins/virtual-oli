@@ -13,8 +13,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class PersonService {
 
-  private peopleUrl = 'api/people';  // URL to web api
-  private devicesUrl = 'api/devices';  // URL to web api
+  private peopleUrl = '/api/people';  // URL to web api
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -46,6 +45,16 @@ export class PersonService {
     return this.http.post<Person>(this.peopleUrl, person, this.httpOptions).pipe(
       tap((newPerson: Person) => this.log(`added person w/ id=${newPerson._id}`)),
       catchError(this.handleError<Person>('addPerson'))
+    );
+  }
+
+  eat(id: string, carbs: Person): Observable<Person> { // TODO: make a meal class?
+    console.log('eating');
+    const url = `${this.peopleUrl}/${id}`;
+    console.log(url);
+    return this.http.post<Person>(url, carbs, this.httpOptions).pipe(
+      tap(() => this.log('eating success')),
+      catchError(this.handleError<Person>('eat'))
     );
   }
 

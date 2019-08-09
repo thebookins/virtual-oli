@@ -12,8 +12,7 @@ const connectToDB = () => {
     });
 };
 
-const t1d = require('./sim/t1d2');
-const pump = require('./sim/pump');
+const Helper = require('./helper');
 
 // Spin up multiple processes to handle jobs to take advantage of more CPU cores
 // See: https://devcenter.heroku.com/articles/node-concurrency for more info
@@ -31,6 +30,8 @@ let maxJobsPerWorker = 50;
 
 function start() {
   connectToDB().then(db => {
+    helper = Helper(db);
+
     // NOTE: this only needs be done once, and can be done on the server
     db.collection('cgm-events').createIndex( { "readDate": 1 }, { expireAfterSeconds: 7200 } );
 
@@ -39,44 +40,9 @@ function start() {
     workQueue.process(maxJobsPerWorker, async (job) => {
       console.log(`worker got data ${JSON.stringify(job.data)}`);
       if (job.data.type !== 'update') return;
-
-      // for each pump in the database update its state
-      // and dose its connected person with the basal insulin
-      await db.collection('pumps').find().forEach(doc => {
-        const dose = insulin => {
-          db.collection('people').findOne({_id: doc.person_id})
-          .then(person => {
-            const updatedState = t1d(person.state, 'dose', insulin * 1000);
-            db.collection('people').updateOne({_id: person._id}, {$set: {state: updatedState}});
-          });
-        };
-        const updatedState = pump(doc.state, 'basal', dose);
-        db.collection('pumps').updateOne({_id: doc._id}, {$set: {state: updatedState}});
-      });
-
-      // for each person, update state
-      await db.collection('people').find().forEach(person => {
-        const updatedState = t1d(person.state, 'step', 1)
-        // const updatedGlucose = doc.glucose + 1;
-        db.collection('people').updateOne({_id: person._id}, {$set: {state: updatedState}});
-      });
-
-      // update the clock
-      await db.collection('cgms').updateMany({}, {
-        $inc: { clock: 1 },
-        $currentDate: { lastModified: true }
-      });
-
-      // every five minutes...
-      await db.collection('cgms').find({ clock: { $mod: [ 5, 0 ] } }).forEach(cgm => {
-        // if five cgm minutes is up...
-        db.collection('people').findOne({_id: cgm.person_id})
-        .then(person => {
-          const glucose = t1d(person.state, 'glucose');
-          db.collection('cgm-events').insertOne({readDate: new Date(), glucose});
-          console.log(`glucose = ${glucose}`);
-        })
-      });
+      await helper.pump.step();
+      await helper.person.step();
+      await helper.cgm.step();
     });
   });
 }
