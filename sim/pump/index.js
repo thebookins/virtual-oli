@@ -1,4 +1,4 @@
-const basalRate = 1; // U/hr
+const basalRate = 0; // U/hr
 const dt = 1; // min
 
 const pump = (state, action, ...args) => {

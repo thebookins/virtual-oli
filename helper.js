@@ -1,6 +1,9 @@
 const mongodb = require("mongodb");
 const ObjectID = mongodb.ObjectID;
 
+// just for posting to NS - can remove later
+const request = require('request');
+
 // NOTE: are the classes really necessary any more?
 // see the note below (line 18)
 const _t1d = require('./sim/t1d2');
@@ -8,6 +11,36 @@ const _pump = require('./sim/pump');
 const _cgm = require('./sim/cgm')();
 
 const PWD = require('marjorie').PWD;
+
+const postToNS = (entry) => {
+  const secret = 'fbad6ca12517a31af38ff50f4c43bd87b03d73ff';
+  let ns_url = 'https://third15.herokuapp.com/api/v1/entries.json';
+  let ns_headers = {
+    'Content-Type': 'application/json'
+  };
+
+  ns_headers['API-SECRET'] = secret;
+
+  const optionsNS = {
+    url: ns_url,
+    timeout: 30*1000,
+    method: 'POST',
+    headers: ns_headers,
+    body: entry,
+    json: true
+  };
+
+  /*eslint-disable no-unused-vars*/
+  request(optionsNS, function (error, response, body) {
+  /*eslint-enable no-unused-vars*/
+    if (error) {
+      console.error('error posting json: ', error);
+    } else {
+      console.log('uploaded to NS, statusCode = ' + response.statusCode);
+    }
+  });
+};
+
 
 class Meal {
   constructor(g, t) {
@@ -60,15 +93,14 @@ module.exports = db => {
         .then(doc => doc.value.pendingInsulin)
         .then(pendingInsulin => {
           db.collection('meals').find({ person_id: doc._id }).toArray(function(err, meals) {
-            let state = doc.state;
+            let state = doc.state || {};
             state.gut = { meals };
 
-            const model = PWD(1, state);
+            const model = PWD({ state });
             model.bolus(pendingInsulin * 1e3);
             model.step(0);
 
-            state = (({ glucose, insulin }) => ({ glucose, insulin }))(state);
-
+            state = (({ glucose, insulin }) => ({ glucose, insulin }))(model.state);
             return db.collection('people').updateOne({_id: doc._id}, {$set: { state: state }});
           });
         });
@@ -115,8 +147,30 @@ module.exports = db => {
          { clock: { $mod: [ 5, 0 ] } }
        ).forEach(doc => {
          return person.sense(doc.person_id)
-         .then(glucose => db.collection('cgm-events').insertOne({readDate: new Date(), glucose}))
-         .then(() => _cgm.postAPN());
+         // TODO: limit glucose between 40 and 400 mg/dl
+         .then(glucose => {
+           console.log(`glucose = ${glucose}`);
+           const date = new Date();
+           return db.collection('cgm-events').insertOne({
+             cgm_id: new ObjectID(doc._id),
+             readDate: date,
+             glucose,
+           })
+           .then(() => _cgm.postAPN())
+           .then(() => {
+             entry = {
+               'device': 'vitual-oli',
+               'date': date.getTime(),
+               'dateString': date.toISOString(),
+               'sgv': Math.round(glucose * 18),
+               // 'direction': direction,
+               'type': 'sgv',
+               // 'trend': glucose.trend,
+               'glucose': Math.round(glucose * 18)
+             };
+             postToNS(entry);
+           });
+         });
        })
      })
    };

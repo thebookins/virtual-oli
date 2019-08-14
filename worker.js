@@ -35,6 +35,9 @@ function start() {
     // NOTE: this only needs be done once, and can be done on the server
     db.collection('cgm-events').createIndex( { "readDate": 1 }, { expireAfterSeconds: 7200 } );
 
+    // NOTE: this only needs be done once, and can be done on the server
+    db.collection('meals').createIndex( { "date": 1 }, { expireAfterSeconds: 60 * 60 * 24 } );
+
     let workQueue = new Queue('work', REDIS_URL);
 
     workQueue.process(maxJobsPerWorker, async (job) => {

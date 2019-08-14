@@ -13,7 +13,7 @@ module.exports = () => {
   const apnProvider = new apn.Provider(options);
 
   const postAPN = () => {
-    let deviceToken = "c31ce3c0585db5744839accc7c6a6d42eb7649d0b9608b8df1757be077947240"
+    let deviceToken = "73279d1446f62f51cd12f090dc2a551ec1f127c28869bc0096902b7300bacbdb"
 
     var note = new apn.Notification();
     note.contentAvailable = 1;

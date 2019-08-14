@@ -2,7 +2,7 @@ const PWD = require('marjorie').PWD;
 // const events = require('events');
 
 const curry = (state, action, ...args) => {
-  const model = PWD(1, state);
+  const model = PWD({ state });
 
   const step = (U_I) => {
     model.step(U_I);
