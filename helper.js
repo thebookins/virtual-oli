@@ -151,11 +151,16 @@ module.exports = db => {
          .then(glucose => {
            console.log(`glucose = ${glucose}`);
            const date = new Date();
-           return db.collection('cgm-events').insertOne({
+           return db.collection('cgms').updateOne(
+             {_id: new ObjectID(doc._id)},
+             { $set: {latestGlucose: {readDate: date, glucose}}}
+           )
+           .then(doc => {})
+           .then(() => db.collection('cgm-events').insertOne({
              cgm_id: new ObjectID(doc._id),
              readDate: date,
              glucose,
-           })
+           }))
            .then(() => _cgm.postAPN())
            .then(() => {
              entry = {

@@ -186,11 +186,11 @@ app.get("/api/cgms", function(req, res) {
 });
 
 app.get("/api/cgms/:id", function(req, res) {
-  db.collection('cgm-events').findOne({
-    cgm_id: new ObjectID(req.params.id)
+  db.collection('cgms').findOne({
+    _id: new ObjectID(req.params.id)
   }, function(err, doc) {
     if (err) {
-      handleError(res, err.message, "Failed to get cgm event");
+      handleError(res, err.message, "Failed to get cgm details");
     } else {
       res.status(200).json(doc);
     }
