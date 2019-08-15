@@ -13,7 +13,7 @@ const _cgm = require('./sim/cgm')();
 const PWD = require('marjorie').PWD;
 
 const postToNS = (entry) => {
-  const secret = 'fbad6ca12517a31af38ff50f4c43bd87b03d73ff';
+  const secret = '768eb61af4f4e23182e2089a79e04c9532c26ff5';
   let ns_url = 'https://third15.herokuapp.com/api/v1/entries.json';
   let ns_headers = {
     'Content-Type': 'application/json'
