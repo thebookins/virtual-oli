@@ -2,7 +2,7 @@ const mongodb = require("mongodb");
 const ObjectID = mongodb.ObjectID;
 
 // just for posting to NS - can remove later
-const request = require('request');
+// const request = require('request');
 
 // NOTE: are the classes really necessary any more?
 // see the note below (line 18)
@@ -12,34 +12,34 @@ const _cgm = require('./sim/cgm')();
 
 const PWD = require('marjorie').PWD;
 
-const postToNS = (entry) => {
-  const secret = '768eb61af4f4e23182e2089a79e04c9532c26ff5';
-  let ns_url = 'https://third15.herokuapp.com/api/v1/entries.json';
-  let ns_headers = {
-    'Content-Type': 'application/json'
-  };
-
-  ns_headers['API-SECRET'] = secret;
-
-  const optionsNS = {
-    url: ns_url,
-    timeout: 30*1000,
-    method: 'POST',
-    headers: ns_headers,
-    body: entry,
-    json: true
-  };
-
-  /*eslint-disable no-unused-vars*/
-  request(optionsNS, function (error, response, body) {
-  /*eslint-enable no-unused-vars*/
-    if (error) {
-      console.error('error posting json: ', error);
-    } else {
-      console.log('uploaded to NS, statusCode = ' + response.statusCode);
-    }
-  });
-};
+// const postToNS = (entry) => {
+//   const secret = '768eb61af4f4e23182e2089a79e04c9532c26ff5';
+//   let ns_url = 'https://third15.herokuapp.com/api/v1/entries.json';
+//   let ns_headers = {
+//     'Content-Type': 'application/json'
+//   };
+//
+//   ns_headers['API-SECRET'] = secret;
+//
+//   const optionsNS = {
+//     url: ns_url,
+//     timeout: 30*1000,
+//     method: 'POST',
+//     headers: ns_headers,
+//     body: entry,
+//     json: true
+//   };
+//
+//   /*eslint-disable no-unused-vars*/
+//   request(optionsNS, function (error, response, body) {
+//   /*eslint-enable no-unused-vars*/
+//     if (error) {
+//       console.error('error posting json: ', error);
+//     } else {
+//       console.log('uploaded to NS, statusCode = ' + response.statusCode);
+//     }
+//   });
+// };
 
 
 class Meal {
@@ -162,19 +162,19 @@ module.exports = db => {
              glucose,
            }))
            .then(() => _cgm.postAPN())
-           .then(() => {
-             entry = {
-               'device': 'vitual-oli',
-               'date': date.getTime(),
-               'dateString': date.toISOString(),
-               'sgv': Math.round(glucose * 18),
-               // 'direction': direction,
-               'type': 'sgv',
-               // 'trend': glucose.trend,
-               'glucose': Math.round(glucose * 18)
-             };
-             postToNS(entry);
-           });
+           // .then(() => {
+           //   entry = {
+           //     'device': 'vitual-oli',
+           //     'date': date.getTime(),
+           //     'dateString': date.toISOString(),
+           //     'sgv': Math.round(glucose * 18),
+           //     // 'direction': direction,
+           //     'type': 'sgv',
+           //     // 'trend': glucose.trend,
+           //     'glucose': Math.round(glucose * 18)
+           //   };
+           //   postToNS(entry);
+           // });
          });
        })
      })
